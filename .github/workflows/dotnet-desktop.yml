@@ -65,15 +65,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "8.0.x"
 
-      - name: Restore NuGet packages
-        run: dotnet restore ConcurrentProgramming.sln
-
       - name: Build solution
-        run: dotnet build ConcurrentProgramming.sln --configuration Release
+        run: dotnet build ConcurrentProgramming.sln
 
       - name: Run unit tests
-        run: dotnet test ConcurrentProgramming.sln --configuration Release --
+        run: dotnet test ConcurrentProgramming.sln

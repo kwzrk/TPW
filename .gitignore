@@ -398,3 +398,15 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+
+
+
+
+#student-defined
+Fundamentals*
+Communication*
+CommonDataConsistency*
+Data*
+Synchronization*
+RealTimeProgramming*
