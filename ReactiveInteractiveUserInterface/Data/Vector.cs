@@ -16,7 +16,6 @@ namespace TP.ConcurrentProgramming.Data
   /// </summary>
   internal record Vector : IVector
   {
-    #region IVector
 
     /// <summary>
     /// The X component of the vector.
@@ -27,7 +26,6 @@ namespace TP.ConcurrentProgramming.Data
     /// </summary>
     public double y { get; init; }
 
-    #endregion IVector
 
     /// <summary>
     /// Creates new instance of <seealso cref="Vector"/> and initialize all properties

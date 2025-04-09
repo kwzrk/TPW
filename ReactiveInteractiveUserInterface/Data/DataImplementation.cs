@@ -15,16 +15,13 @@ namespace TP.ConcurrentProgramming.Data
 {
   internal class DataImplementation : DataAbstractAPI
   {
-    #region ctor
 
     public DataImplementation()
     {
       MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
     }
 
-    #endregion ctor
 
-    #region DataAbstractAPI
 
     public override void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler)
     {
@@ -42,9 +39,7 @@ namespace TP.ConcurrentProgramming.Data
       }
     }
 
-    #endregion DataAbstractAPI
 
-    #region IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
@@ -68,9 +63,7 @@ namespace TP.ConcurrentProgramming.Data
       GC.SuppressFinalize(this);
     }
 
-    #endregion IDisposable
 
-    #region private
 
     //private bool disposedValue;
     private bool Disposed = false;
@@ -85,9 +78,7 @@ namespace TP.ConcurrentProgramming.Data
         item.Move(new Vector((RandomGenerator.NextDouble() - 0.5) * 10, (RandomGenerator.NextDouble() - 0.5) * 10));
     }
 
-    #endregion private
 
-    #region TestingInfrastructure
 
     [Conditional("DEBUG")]
     internal void CheckBallsList(Action<IEnumerable<IBall>> returnBallsList)
@@ -107,6 +98,5 @@ namespace TP.ConcurrentProgramming.Data
       returnInstanceDisposed(Disposed);
     }
 
-    #endregion TestingInfrastructure
   }
 }
