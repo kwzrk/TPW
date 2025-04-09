@@ -17,7 +17,6 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
 {
   public class MainWindowViewModel : ViewModelBase, IDisposable
   {
-    #region ctor
 
     public MainWindowViewModel() : this(null)
     { }
@@ -28,9 +27,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
       Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
     }
 
-    #endregion ctor
 
-    #region public API
 
     public void Start(int numberOfBalls)
     {
@@ -42,9 +39,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
 
     public ObservableCollection<ModelIBall> Balls { get; } = new ObservableCollection<ModelIBall>();
 
-    #endregion public API
 
-    #region IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
@@ -71,14 +66,11 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
       GC.SuppressFinalize(this);
     }
 
-    #endregion IDisposable
 
-    #region private
 
     private IDisposable Observer = null;
     private ModelAbstractApi ModelLayer;
     private bool Disposed = false;
 
-    #endregion private
   }
 }

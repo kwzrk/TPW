@@ -49,18 +49,14 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
       }
     }
 
-    #region testing instrumentation
 
     private class UnderneathLayerFixture : BusinessLogicAbstractAPI
     {
-      #region testing instrumentation
 
       internal bool Disposed = false;
       internal int NumberOfBalls = 0;
 
-      #endregion testing instrumentation
 
-      #region BusinessLogicAbstractAPI
 
       public override void Dispose()
       {
@@ -73,9 +69,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
         Assert.IsNotNull(upperLayerHandler);
       }
 
-      #endregion BusinessLogicAbstractAPI
     }
 
-    #endregion testing instrumentation
   }
 }

@@ -14,13 +14,10 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight
 {
   public class ViewModelBase : INotifyPropertyChanged
   {
-    #region INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    #endregion INotifyPropertyChanged
 
-    #region API
 
     /// <summary>
     /// Raises the PropertyChanged event if needed.
@@ -33,6 +30,5 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    #endregion API
   }
 }

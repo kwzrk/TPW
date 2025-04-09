@@ -22,7 +22,6 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight
   /// <remarks>The <see cref="CommandManager"/>handles automatic enabling/disabling of controls based on the CanExecute delegate.</remarks>
   public class RelayCommand : ICommand
   {
-    #region constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RelayCommand"/>  class that can always execute.
@@ -43,9 +42,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight
       this.m_CanExecute = canExecute;
     }
 
-    #endregion constructors
 
-    #region ICommand
 
     /// <summary>
     /// Defines the method that determines whether the command can execute in its current state.
@@ -77,9 +74,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight
     /// </summary>
     public event EventHandler CanExecuteChanged;
 
-    #endregion ICommand
 
-    #region API
 
     /// <summary>
     /// Raises the <see cref="CanExecuteChanged" /> event.
@@ -89,13 +84,10 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight
       this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    #endregion API
 
-    #region private
 
     private readonly Action m_Execute;
     private readonly Func<bool> m_CanExecute;
 
-    #endregion private
   }
 }

@@ -40,7 +40,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
       Assert.AreEqual<double>(1.0, ball.Top);
     }
 
-    #region testing instrumentation
 
     private class BusinessLogicIBallFixture : BusinessLogic.IBall
     {
@@ -52,6 +51,5 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
       }
     }
 
-    #endregion testing instrumentation
   }
 }

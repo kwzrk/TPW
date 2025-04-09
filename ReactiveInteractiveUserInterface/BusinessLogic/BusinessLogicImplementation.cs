@@ -15,7 +15,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 {
   internal class BusinessLogicImplementation : BusinessLogicAbstractAPI
   {
-    #region ctor
 
     public BusinessLogicImplementation() : this(null)
     { }
@@ -25,9 +24,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       layerBellow = underneathLayer == null ? UnderneathLayerAPI.GetDataLayer() : underneathLayer;
     }
 
-    #endregion ctor
 
-    #region BusinessLogicAbstractAPI
 
     public override void Dispose()
     {
@@ -46,17 +43,13 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       layerBellow.Start(numberOfBalls, (startingPosition, databall) => upperLayerHandler(new Position(startingPosition.x, startingPosition.x), new Ball(databall)));
     }
 
-    #endregion BusinessLogicAbstractAPI
 
-    #region private
 
     private bool Disposed = false;
 
     private readonly UnderneathLayerAPI layerBellow;
 
-    #endregion private
 
-    #region TestingInfrastructure
 
     [Conditional("DEBUG")]
     internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)
@@ -64,6 +57,5 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       returnInstanceDisposed(Disposed);
     }
 
-    #endregion TestingInfrastructure
   }
 }

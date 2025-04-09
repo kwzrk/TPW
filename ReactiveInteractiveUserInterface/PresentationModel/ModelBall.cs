@@ -26,7 +26,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model
       underneathBall.NewPositionNotification += NewPositionNotification;
     }
 
-    #region IBall
 
     public double Top
     {
@@ -54,15 +53,11 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
     public double Diameter { get; init; } = 0;
 
-    #region INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    #endregion INotifyPropertyChanged
 
-    #endregion IBall
 
-    #region private
 
     private double TopBackingField;
     private double LeftBackingField;
@@ -77,9 +72,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    #endregion private
 
-    #region testing instrumentation
 
     [Conditional("DEBUG")]
     internal void SetLeft(double x)
@@ -89,6 +82,5 @@ namespace TP.ConcurrentProgramming.Presentation.Model
     internal void SettTop(double x)
     { Top = x; }
 
-    #endregion testing instrumentation
   }
 }

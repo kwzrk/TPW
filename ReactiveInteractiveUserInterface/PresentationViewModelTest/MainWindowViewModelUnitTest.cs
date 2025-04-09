@@ -56,19 +56,15 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
       Assert.AreEqual<int>(0, viewModel.Balls.Count);
     }
 
-    #region testing infrastructure
 
     private class ModelNullFixture : ModelAbstractApi
     {
-      #region Test
 
       internal int Disposed = 0;
       internal int Started = 0;
       internal int Subscribed = 0;
 
-      #endregion Test
 
-      #region ModelAbstractApi
 
       public override void Dispose()
       {
@@ -86,9 +82,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
         return new NullDisposable();
       }
 
-      #endregion ModelAbstractApi
 
-      #region private
 
       private class NullDisposable : IDisposable
       {
@@ -96,27 +90,21 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
         { }
       }
 
-      #endregion private
     }
 
     private class ModelSimulatorFixture : ModelAbstractApi
     {
-      #region Testing indicators
 
       internal bool Disposed = false;
 
-      #endregion Testing indicators
 
-      #region ctor
 
       public ModelSimulatorFixture()
       {
         eventObservable = Observable.FromEventPattern<BallChaneEventArgs>(this, "BallChanged");
       }
 
-      #endregion ctor
 
-      #region ModelAbstractApi fixture
 
       public override IDisposable? Subscribe(IObserver<ModelIBall> observer)
       {
@@ -137,15 +125,11 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
         Disposed = true;
       }
 
-      #endregion ModelAbstractApi
 
-      #region API
 
       public event EventHandler<BallChaneEventArgs> BallChanged;
 
-      #endregion API
 
-      #region private
 
       private IObservable<EventPattern<BallChaneEventArgs>>? eventObservable = null;
 
@@ -154,7 +138,6 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
         public ModelBall(double top, double left)
         { }
 
-        #region IBall
 
         public double Diameter => throw new NotImplementedException();
 
@@ -162,18 +145,13 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
 
         public double Left => throw new NotImplementedException();
 
-        #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        #endregion INotifyPropertyChanged
 
-        #endregion IBall
       }
 
-      #endregion private
     }
 
-    #endregion testing infrastructure
   }
 }

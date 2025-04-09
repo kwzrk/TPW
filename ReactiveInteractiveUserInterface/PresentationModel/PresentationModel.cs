@@ -29,7 +29,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model
       eventObservable = Observable.FromEventPattern<BallChaneEventArgs>(this, "BallChanged");
     }
 
-    #region ModelAbstractApi
 
     public override void Dispose()
     {
@@ -49,15 +48,11 @@ namespace TP.ConcurrentProgramming.Presentation.Model
       layerBellow.Start(numberOfBalls, StartHandler);
     }
 
-    #endregion ModelAbstractApi
 
-    #region API
 
     public event EventHandler<BallChaneEventArgs> BallChanged;
 
-    #endregion API
 
-    #region private
 
     private bool Disposed = false;
     private readonly IObservable<EventPattern<BallChaneEventArgs>> eventObservable = null;
@@ -69,9 +64,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model
       BallChanged.Invoke(this, new BallChaneEventArgs() { Ball = newBall });
     }
 
-    #endregion private
 
-    #region TestingInfrastructure
 
     [Conditional("DEBUG")]
     internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)
@@ -91,7 +84,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model
       returnBallChangedIsNull(BallChanged == null);
     }
 
-    #endregion TestingInfrastructure
   }
 
   public class BallChaneEventArgs : EventArgs

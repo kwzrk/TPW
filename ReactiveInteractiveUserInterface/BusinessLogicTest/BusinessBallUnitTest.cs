@@ -29,7 +29,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
             Assert.AreEqual<int>(1, numberOfCallBackCalled);
         }
 
-        #region testing instrumentation
 
         private class DataBallFixture : Data.IBall
         {
@@ -59,7 +58,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
             public double y { get; init; }
         }
 
-        #endregion testing instrumentation
     }
 }
 

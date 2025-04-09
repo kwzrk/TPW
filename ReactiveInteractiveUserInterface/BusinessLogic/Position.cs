@@ -12,12 +12,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 {
   internal record Position : IPosition
   {
-    #region IPosition
 
     public double x { get; init; }
     public double y { get; init; }
 
-    #endregion IPosition
 
     /// <summary>
     /// Creates new instance of <seealso cref="IPosition"/> and initialize all properties

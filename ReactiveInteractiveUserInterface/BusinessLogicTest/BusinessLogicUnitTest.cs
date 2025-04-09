@@ -60,7 +60,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       }
     }
 
-    #region testing instrumentation
 
     private class DataLayerConstructorFixcure : Data.DataAbstractAPI
     {
@@ -117,6 +116,5 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       }
     }
 
-    #endregion testing instrumentation
   }
 }
