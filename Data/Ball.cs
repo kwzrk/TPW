@@ -8,37 +8,27 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
-namespace TP.ConcurrentProgramming.Data
-{
-  internal class Ball : IBall
-  {
+namespace TP.ConcurrentProgramming.Data {
+    internal class Ball : IBall {
 
-    internal Ball(Vector initialPosition, Vector initialVelocity)
-    {
-      Position = initialPosition;
-      Velocity = initialVelocity;
+        internal Ball(Vector initialPosition, Vector initialVelocity) {
+            Position = initialPosition;
+            Velocity = initialVelocity;
+        }
+
+
+        public event EventHandler<IVector>? NewPositionNotification;
+        public IVector Velocity { get; set; }
+        private Vector Position;
+
+        private void RaiseNewPositionChangeNotification() {
+            NewPositionNotification?.Invoke(this, Position);
+        }
+
+        internal void Move(Vector delta) {
+            Position = new Vector(Position.x + delta.x, Position.y + delta.y);
+            RaiseNewPositionChangeNotification();
+        }
+
     }
-
-
-
-    public event EventHandler<IVector>? NewPositionNotification;
-
-    public IVector Velocity { get; set; }
-
-
-
-    private Vector Position;
-
-    private void RaiseNewPositionChangeNotification()
-    {
-      NewPositionNotification?.Invoke(this, Position);
-    }
-
-    internal void Move(Vector delta)
-    {
-      Position = new Vector(Position.x + delta.x, Position.y + delta.y);
-      RaiseNewPositionChangeNotification();
-    }
-
-  }
 }

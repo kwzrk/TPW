@@ -11,51 +11,33 @@
 using System.Diagnostics;
 using UnderneathLayerAPI = TP.ConcurrentProgramming.Data.DataAbstractAPI;
 
-namespace TP.ConcurrentProgramming.BusinessLogic
-{
-  internal class BusinessLogicImplementation : BusinessLogicAbstractAPI
-  {
+namespace TP.ConcurrentProgramming.BusinessLogic {
+    internal class BusinessLogicImplementation : BusinessLogicAbstractAPI {
+        public BusinessLogicImplementation() : this(null) { }
+        internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer) {
+            layerBellow = underneathLayer == null ? UnderneathLayerAPI.GetDataLayer() : underneathLayer;
+        }
+        public override void Dispose() {
+            if (Disposed)
+                throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
+            layerBellow.Dispose();
+            Disposed = true;
+        }
+        public override void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler) {
+            if (Disposed)
+                throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
+            if (upperLayerHandler == null)
+                throw new ArgumentNullException(nameof(upperLayerHandler));
+            layerBellow.Start(numberOfBalls, (startingPosition, databall) => upperLayerHandler(new Position(startingPosition.x, startingPosition.x), new Ball(databall)));
+        }
 
-    public BusinessLogicImplementation() : this(null)
-    { }
+        private bool Disposed = false;
+        private readonly UnderneathLayerAPI layerBellow;
 
-    internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer)
-    {
-      layerBellow = underneathLayer == null ? UnderneathLayerAPI.GetDataLayer() : underneathLayer;
+        [Conditional("DEBUG")]
+        internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed) {
+            returnInstanceDisposed(Disposed);
+        }
+
     }
-
-
-
-    public override void Dispose()
-    {
-      if (Disposed)
-        throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
-      layerBellow.Dispose();
-      Disposed = true;
-    }
-
-    public override void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler)
-    {
-      if (Disposed)
-        throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
-      if (upperLayerHandler == null)
-        throw new ArgumentNullException(nameof(upperLayerHandler));
-      layerBellow.Start(numberOfBalls, (startingPosition, databall) => upperLayerHandler(new Position(startingPosition.x, startingPosition.x), new Ball(databall)));
-    }
-
-
-
-    private bool Disposed = false;
-
-    private readonly UnderneathLayerAPI layerBellow;
-
-
-
-    [Conditional("DEBUG")]
-    internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)
-    {
-      returnInstanceDisposed(Disposed);
-    }
-
-  }
 }

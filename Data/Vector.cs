@@ -9,31 +9,28 @@
 //  by introducing yourself and telling us what you do with this community.
 //_____________________________________________________________________________________________________________________________________
 
-namespace TP.ConcurrentProgramming.Data
-{
-  /// <summary>
-  ///  Two dimensions immutable vector
-  /// </summary>
-  internal record Vector : IVector
-  {
+namespace TP.ConcurrentProgramming.Data {
+    /// <summary>
+    ///  Two dimensions immutable vector
+    /// </summary>
+    internal record Vector : IVector {
 
-    /// <summary>
-    /// The X component of the vector.
-    /// </summary>
-    public double x { get; init; }
-    /// <summary>
-    /// The Y component of the vector.
-    /// </summary>
-    public double y { get; init; }
+        /// <summary>
+        /// The X component of the vector.
+        /// </summary>
+        public double x { get; init; }
+        /// <summary>
+        /// The Y component of the vector.
+        /// </summary>
+        public double y { get; init; }
 
 
-    /// <summary>
-    /// Creates new instance of <seealso cref="Vector"/> and initialize all properties
-    /// </summary>
-    public Vector(double XComponent, double YComponent)
-    {
-      x = XComponent;
-      y = YComponent;
+        /// <summary>
+        /// Creates new instance of <seealso cref="Vector"/> and initialize all properties
+        /// </summary>
+        public Vector(double XComponent, double YComponent) {
+            x = XComponent;
+            y = YComponent;
+        }
     }
-  }
 }
