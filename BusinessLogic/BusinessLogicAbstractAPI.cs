@@ -8,9 +8,13 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using System.Numerics;
+
 namespace TP.ConcurrentProgramming.BusinessLogic {
     public abstract class BusinessLogicAbstractAPI : IDisposable {
 
+        private static Lazy<BusinessLogicAbstractAPI> modelInstance = new Lazy<BusinessLogicAbstractAPI>(() => new BusinessLogicImplementation());
+        
         public static BusinessLogicAbstractAPI GetBusinessLogicLayer() {
             return modelInstance.Value;
         }
@@ -19,7 +23,9 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
         public abstract void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler);
         public abstract void Dispose();
 
-        private static Lazy<BusinessLogicAbstractAPI> modelInstance = new Lazy<BusinessLogicAbstractAPI>(() => new BusinessLogicImplementation());
+        //public abstract void CreateBall(IPosition position, IPosition velocity);
+        //public abstract IEnumerable<IBall> GetBallsList();
+        //public abstract void MoveBalls();
 
     }
     /// <summary>

@@ -11,24 +11,33 @@
 namespace TP.ConcurrentProgramming.Data {
     internal class Ball : IBall {
 
-        internal Ball(Vector initialPosition, Vector initialVelocity) {
-            Position = initialPosition;
-            Velocity = initialVelocity;
+        private readonly object _lock = new object();
+        private Vector _position;
+        private Vector _velocity;
+        public IVector Velocity {
+            get {
+                lock (_lock) return _velocity;
+            }
+            set {
+                lock (_lock) _velocity = (Vector)value;
+            }
         }
 
+        internal Ball(Vector initialPosition, Vector initialVelocity) {
+            _position = initialPosition;
+            _velocity = initialVelocity;
+
+        }
 
         public event EventHandler<IVector>? NewPositionNotification;
-        public IVector Velocity { get; set; }
-        private Vector Position;
 
         private void RaiseNewPositionChangeNotification() {
-            NewPositionNotification?.Invoke(this, Position);
+            NewPositionNotification?.Invoke(this, _position);
         }
 
         internal void Move(Vector delta) {
-            Position = new Vector(Position.x + delta.x, Position.y + delta.y);
+            _position = new Vector(_position.x + delta.x, _position.y + delta.y);
             RaiseNewPositionChangeNotification();
         }
-
     }
 }

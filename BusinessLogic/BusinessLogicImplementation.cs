@@ -13,6 +13,8 @@ using UnderneathLayerAPI = TP.ConcurrentProgramming.Data.DataAbstractAPI;
 
 namespace TP.ConcurrentProgramming.BusinessLogic {
     internal class BusinessLogicImplementation : BusinessLogicAbstractAPI {
+        private bool Disposed = false;
+        private readonly UnderneathLayerAPI layerBellow;
         public BusinessLogicImplementation() : this(null) { }
         internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer) {
             layerBellow = underneathLayer == null ? UnderneathLayerAPI.GetDataLayer() : underneathLayer;
@@ -31,13 +33,21 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
             layerBellow.Start(numberOfBalls, (startingPosition, databall) => upperLayerHandler(new Position(startingPosition.x, startingPosition.x), new Ball(databall)));
         }
 
-        private bool Disposed = false;
-        private readonly UnderneathLayerAPI layerBellow;
+        //public override void CreateBall(IPosition position, IPosition velocity) {
+        //    Ball newBall = new Ball(new Position(position.x, position.y), new Position(velocity.x, velocity.y));
+        //}
+
+        //public override IEnumerable<IBall> GetBallsList() {
+        //    throw new NotImplementedException();
+        //}
+
+        //public override void MoveBalls() {
+        //    throw new NotImplementedException();
+        //}
 
         [Conditional("DEBUG")]
         internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed) {
             returnInstanceDisposed(Disposed);
         }
-
     }
 }
