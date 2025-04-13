@@ -56,14 +56,33 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
       internal bool Disposed = false;
       internal int NumberOfBalls = 0;
 
-
+      public override void CreateBall(
+        IPosition position,
+        IPosition velocity
+      )
+      {
+          throw new NotImplementedException();
+      }
 
       public override void Dispose()
       {
         Disposed = true;
       }
 
-      public override void Start(int numberOfBalls, Action<IPosition, BusinessLogic.IBall> upperLayerHandler)
+      public override IEnumerable<BusinessLogic.IBall> GetBallsList()
+      {
+          throw new NotImplementedException();
+      }
+
+      public override void MoveBalls()
+      {
+          throw new NotImplementedException();
+      }
+
+      public override void Start(
+        int numberOfBalls,
+        Action<IPosition, BusinessLogic.IBall> upperLayerHandler
+      )
       {
         NumberOfBalls = numberOfBalls;
         Assert.IsNotNull(upperLayerHandler);

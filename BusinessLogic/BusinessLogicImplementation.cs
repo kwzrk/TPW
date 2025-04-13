@@ -17,7 +17,9 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
         private readonly UnderneathLayerAPI layerBellow;
         public BusinessLogicImplementation() : this(null) { }
         internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer) {
-            layerBellow = underneathLayer == null ? UnderneathLayerAPI.GetDataLayer() : underneathLayer;
+            layerBellow = underneathLayer == null ?
+                UnderneathLayerAPI.GetDataLayer() :
+                underneathLayer;
         }
         public override void Dispose() {
             if (Disposed)
@@ -25,25 +27,34 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
             layerBellow.Dispose();
             Disposed = true;
         }
-        public override void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler) {
+        public override void Start(
+          int numberOfBalls,
+          Action<IPosition, IBall> upperLayerHandler
+        ) {
             if (Disposed)
                 throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
             if (upperLayerHandler == null)
                 throw new ArgumentNullException(nameof(upperLayerHandler));
-            layerBellow.Start(numberOfBalls, (startingPosition, databall) => upperLayerHandler(new Position(startingPosition.x, startingPosition.x), new Ball(databall)));
+            layerBellow.Start(
+              numberOfBalls,
+              (startingPosition, databall) => upperLayerHandler(
+                new Position(startingPosition.x, startingPosition.x),
+                new Ball(databall)
+              )
+            );
         }
 
-        //public override void CreateBall(IPosition position, IPosition velocity) {
-        //    Ball newBall = new Ball(new Position(position.x, position.y), new Position(velocity.x, velocity.y));
-        //}
+        public override void CreateBall(IPosition position, IPosition velocity) {
+          layerBellow.CreateBall(position.x, position.y, velocity.x, velocity.y);
+        }
 
-        //public override IEnumerable<IBall> GetBallsList() {
-        //    throw new NotImplementedException();
-        //}
+        public override IEnumerable<IBall> GetBallsList() {
+            throw new NotImplementedException();
+        }
 
-        //public override void MoveBalls() {
-        //    throw new NotImplementedException();
-        //}
+        public override void MoveBalls() {
+            throw new NotImplementedException();
+        }
 
         [Conditional("DEBUG")]
         internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed) {

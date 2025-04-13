@@ -11,18 +11,29 @@
 namespace TP.ConcurrentProgramming.Data {
     public abstract class DataAbstractAPI : IDisposable {
 
-        private static Lazy<DataAbstractAPI> modelInstance = new Lazy<DataAbstractAPI>(() => new DataImplementation());
+        private static Lazy<DataAbstractAPI> modelInstance =
+          new Lazy<DataAbstractAPI>(() => new DataImplementation());
 
         public static DataAbstractAPI GetDataLayer() {
             return modelInstance.Value;
         }
 
-        public abstract void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler);
+        public abstract void Start(
+          int numberOfBalls,
+          Action<IVector, IBall> upperLayerHandler
+        );
         public abstract void Dispose();
+
+        public abstract void CreateBall(
+          double posx,
+          double posy,
+          double velx,
+          double vely
+        );
     }
 
     public interface IVector {
-        
+
         /// The X component of the vector.
         double x { get; init; }
 

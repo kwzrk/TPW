@@ -8,7 +8,6 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
-using System;
 using System.Diagnostics;
 
 namespace TP.ConcurrentProgramming.Data {
@@ -19,22 +18,41 @@ namespace TP.ConcurrentProgramming.Data {
         private Random RandomGenerator = new();
         private List<Ball> BallsList = [];
 
-        public DataImplementation() {
-            MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+        public DataImplementation()
+        {
+            MoveTimer = new Timer(
+              Move,
+              null,
+              TimeSpan.Zero,
+              TimeSpan.FromMilliseconds(100)
+            );
         }
 
-        public override void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler) {
+        public override void Start(
+          int numberOfBalls,
+          Action<IVector, IBall> upperLayerHandler
+        ) {
             if (Disposed)
-                throw new ObjectDisposedException(nameof(DataImplementation));
+              throw new ObjectDisposedException(nameof(DataImplementation));
             if (upperLayerHandler == null)
-                throw new ArgumentNullException(nameof(upperLayerHandler));
+              throw new ArgumentNullException(nameof(upperLayerHandler));
+
             Random random = new Random();
-            for (int i = 0; i < numberOfBalls; i++) {
-                Vector startingPosition = new(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
+
+            foreach (var _ in Enumerable.Range(0, numberOfBalls))
+            {
+                Vector startingPosition = new(
+                  random.Next(100, 400 - 100),
+                  random.Next(100, 400 - 100)
+                );
                 Ball newBall = new(startingPosition, startingPosition);
                 upperLayerHandler(startingPosition, newBall);
                 BallsList.Add(newBall);
-            }
+            };
+        }
+
+        public override void AddBall(IVector lol, IVector xd) {
+
         }
 
         protected virtual void Dispose(bool disposing) {
@@ -48,15 +66,22 @@ namespace TP.ConcurrentProgramming.Data {
                 throw new ObjectDisposedException(nameof(DataImplementation));
         }
 
-        public override void Dispose() {
+        public override void Dispose()
+        {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
 
-        private void Move(object? x) {
+        private void Move(object? x)
+        {
             foreach (Ball item in BallsList)
-                item.Move(new Vector((RandomGenerator.NextDouble() - 0.5) * 10, (RandomGenerator.NextDouble() - 0.5) * 10));
+            {
+              item.MoveTowards(new Vector(
+                    (RandomGenerator.NextDouble() - 0.5) * 10,
+                    (RandomGenerator.NextDouble() - 0.5) * 10
+              ));
+            }
         }
 
         [Conditional("DEBUG")]

@@ -26,7 +26,6 @@ namespace TP.ConcurrentProgramming.Data {
         internal Ball(Vector initialPosition, Vector initialVelocity) {
             _position = initialPosition;
             _velocity = initialVelocity;
-
         }
 
         public event EventHandler<IVector>? NewPositionNotification;
@@ -35,8 +34,8 @@ namespace TP.ConcurrentProgramming.Data {
             NewPositionNotification?.Invoke(this, _position);
         }
 
-        internal void Move(Vector delta) {
-            _position = new Vector(_position.x + delta.x, _position.y + delta.y);
+        internal void MoveTowards(Vector delta) {
+            _position = _position.add(delta);
             RaiseNewPositionChangeNotification();
         }
     }

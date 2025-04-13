@@ -32,5 +32,9 @@ namespace TP.ConcurrentProgramming.Data {
             x = XComponent;
             y = YComponent;
         }
+
+        public Vector add(Vector delta) {
+          return new Vector(this.x + delta.x, this.y + delta.y);
+        }
     }
 }

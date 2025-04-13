@@ -63,6 +63,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
     private class DataLayerConstructorFixcure : Data.DataAbstractAPI
     {
+      public override void CreateBall(double posx, double posy, double velx, double vely)
+      {
+          throw new NotImplementedException();
+      }
+
       public override void Dispose()
       { }
 
@@ -75,6 +80,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
     private class DataLayerDisposeFixcure : Data.DataAbstractAPI
     {
       internal bool Disposed = false;
+
+      public override void CreateBall(double posx, double posy, double velx, double vely)
+      {
+          throw new NotImplementedException();
+      }
 
       public override void Dispose()
       {
@@ -100,6 +110,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
         StartCalled = true;
         NumberOfBallseCreated = numberOfBalls;
         upperLayerHandler(new DataVectorFixture(), new DataBallFixture());
+      }
+
+      public override void CreateBall(double posx, double posy, double velx, double vely)
+      {
+          throw new NotImplementedException();
       }
 
       private record DataVectorFixture : Data.IVector

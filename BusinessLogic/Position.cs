@@ -13,7 +13,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
         public double x { get; init; }
         public double y { get; init; }
         /// <summary>
-        /// Creates new instance of <seealso cref="IPosition"/> and initialize all properties
+        /// Creates new instance of <see also cref="IPosition"/> and initialize all properties
         /// </summary>
         public Position(double posX, double posY) {
             x = posX;

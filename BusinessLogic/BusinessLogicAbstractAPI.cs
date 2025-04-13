@@ -8,24 +8,29 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
-using System.Numerics;
-
 namespace TP.ConcurrentProgramming.BusinessLogic {
     public abstract class BusinessLogicAbstractAPI : IDisposable {
 
-        private static Lazy<BusinessLogicAbstractAPI> modelInstance = new Lazy<BusinessLogicAbstractAPI>(() => new BusinessLogicImplementation());
-        
+        private static
+          Lazy<BusinessLogicAbstractAPI> modelInstance =
+          new Lazy<BusinessLogicAbstractAPI>(
+            () => new BusinessLogicImplementation()
+          );
+
         public static BusinessLogicAbstractAPI GetBusinessLogicLayer() {
             return modelInstance.Value;
         }
 
         public static readonly Dimensions GetDimensions = new(10.0, 10.0, 10.0);
-        public abstract void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler);
+        public abstract void Start(
+          int numberOfBalls,
+          Action<IPosition, IBall> upperLayerHandler
+        );
         public abstract void Dispose();
 
-        //public abstract void CreateBall(IPosition position, IPosition velocity);
-        //public abstract IEnumerable<IBall> GetBallsList();
-        //public abstract void MoveBalls();
+        public abstract void CreateBall(IPosition position, IPosition velocity);
+        public abstract IEnumerable<IBall> GetBallsList();
+        public abstract void MoveBalls();
 
     }
     /// <summary>
