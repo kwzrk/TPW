@@ -51,9 +51,6 @@ namespace TP.ConcurrentProgramming.Data {
             };
         }
 
-        public override void AddBall(IVector lol, IVector xd) {
-
-        }
 
         protected virtual void Dispose(bool disposing) {
             if (!Disposed) {
@@ -83,6 +80,17 @@ namespace TP.ConcurrentProgramming.Data {
               ));
             }
         }
+
+        public override void CreateBall(
+          double posx,
+          double posy,
+          double velx,
+          double vely
+        )
+        {
+            BallsList.Add(new Ball(new Vector(posx, posy), new Vector(velx, vely)));
+        }
+
 
         [Conditional("DEBUG")]
         internal void CheckBallsList(Action<IEnumerable<IBall>> returnBallsList) {

@@ -404,8 +404,5 @@ FodyWeavers.xsd
 
 
 #student-defined
-Fundamentals*
-Communication*
-CommonDataConsistency*
-Synchronization*
-RealTimeProgramming*
+**/bin/**
+**/obj/**
