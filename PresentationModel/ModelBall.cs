@@ -25,8 +25,10 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
 
 
         public double Top {
-            get { return TopBackingField; }
-            private set {
+            get => TopBackingField;
+
+            private set
+            {
                 if (TopBackingField == value)
                     return;
                 TopBackingField = value;
@@ -34,9 +36,12 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
             }
         }
 
-        public double Left {
-            get { return LeftBackingField; }
-            private set {
+        public double Left
+        {
+            get => LeftBackingField;
+
+            private set
+            {
                 if (LeftBackingField == value)
                     return;
                 LeftBackingField = value;
@@ -55,11 +60,13 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
         private double TopBackingField;
         private double LeftBackingField;
 
-        private void NewPositionNotification(object sender, IPosition e) {
+        private void NewPositionNotification(object sender, IPosition e)
+        {
             Top = e.y; Left = e.x;
         }
 
-        private void RaisePropertyChanged([CallerMemberName] string propertyName = "") {
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 

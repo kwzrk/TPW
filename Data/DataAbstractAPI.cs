@@ -8,13 +8,16 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
-namespace TP.ConcurrentProgramming.Data {
-    public abstract class DataAbstractAPI : IDisposable {
+namespace TP.ConcurrentProgramming.Data
+{
+    public abstract class DataAbstractAPI : IDisposable
+    {
 
         private static Lazy<DataAbstractAPI> modelInstance =
           new Lazy<DataAbstractAPI>(() => new DataImplementation());
 
-        public static DataAbstractAPI GetDataLayer() {
+        public static DataAbstractAPI GetDataLayer()
+        {
             return modelInstance.Value;
         }
 
@@ -22,6 +25,7 @@ namespace TP.ConcurrentProgramming.Data {
           int numberOfBalls,
           Action<IVector, IBall> upperLayerHandler
         );
+
         public abstract void Dispose();
 
         public abstract void CreateBall(
@@ -32,8 +36,8 @@ namespace TP.ConcurrentProgramming.Data {
         );
     }
 
-    public interface IVector {
-
+    public interface IVector
+    {
         /// The X component of the vector.
         double x { get; init; }
 
@@ -41,9 +45,9 @@ namespace TP.ConcurrentProgramming.Data {
         double y { get; init; }
     }
 
-    public interface IBall {
+    public interface IBall
+    {
         event EventHandler<IVector> NewPositionNotification;
-
         IVector Velocity { get; set; }
     }
 }

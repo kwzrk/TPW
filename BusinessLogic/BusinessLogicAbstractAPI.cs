@@ -9,29 +9,38 @@
 //_____________________________________________________________________________________________________________________________________
 
 namespace TP.ConcurrentProgramming.BusinessLogic {
-    public abstract class BusinessLogicAbstractAPI : IDisposable {
+    public abstract class BusinessLogicAbstractAPI : IDisposable
+    {
+      private static Lazy<BusinessLogicAbstractAPI> modelInstance =
+                       new Lazy<BusinessLogicAbstractAPI>(
+                         () => new BusinessLogicImplementation()
+                       );
 
-        private static
-          Lazy<BusinessLogicAbstractAPI> modelInstance =
-          new Lazy<BusinessLogicAbstractAPI>(
-            () => new BusinessLogicImplementation()
-          );
-
-        public static BusinessLogicAbstractAPI GetBusinessLogicLayer() {
-            return modelInstance.Value;
+      public static
+        BusinessLogicAbstractAPI GetBusinessLogicLayer()
+        {
+          return modelInstance.Value;
         }
 
-        public static readonly Dimensions GetDimensions = new(10.0, 10.0, 10.0);
-        public abstract void Start(
-          int numberOfBalls,
-          Action<IPosition, IBall> upperLayerHandler
-        );
-        public abstract void Dispose();
+      public static readonly
+        Dimensions? GetDimensions;
 
-        public abstract void CreateBall(IPosition position, IPosition velocity);
-        public abstract IEnumerable<IBall> GetBallsList();
-        public abstract void MoveBalls();
+      public abstract void Start
+      (
+        int numberOfBalls,
+        Action<IPosition, IBall> upperLayerHandler
+      );
 
+      public abstract void Dispose();
+
+      public abstract void CreateBall
+      (
+        IPosition position,
+        IPosition velocity
+      );
+
+      public abstract IEnumerable<IBall> GetBallsList();
+      public abstract void MoveBalls();
     }
     /// <summary>
     /// Immutable type representing table dimensions
@@ -42,12 +51,19 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
     /// <remarks>
     /// Must be abstract
     /// </remarks>
-    public record Dimensions(double BallDimension, double TableHeight, double TableWidth);
-    public interface IPosition {
+    public record Dimensions(
+      double BallDimension,
+      double TableHeight,
+      double TableWidth
+    );
+
+    public interface IPosition
+    {
         double x { get; init; }
         double y { get; init; }
     }
-    public interface IBall {
+    public interface IBall
+    {
         event EventHandler<IPosition> NewPositionNotification;
     }
 }

@@ -31,9 +31,11 @@ namespace TP.ConcurrentProgramming.Data {
         public override void Start(
           int numberOfBalls,
           Action<IVector, IBall> upperLayerHandler
-        ) {
+        )
+        {
             if (Disposed)
               throw new ObjectDisposedException(nameof(DataImplementation));
+
             if (upperLayerHandler == null)
               throw new ArgumentNullException(nameof(upperLayerHandler));
 
@@ -53,14 +55,19 @@ namespace TP.ConcurrentProgramming.Data {
 
 
         protected virtual void Dispose(bool disposing) {
-            if (!Disposed) {
-                if (disposing) {
+            if (!Disposed)
+            {
+                if (disposing)
+                {
                     MoveTimer.Dispose();
                     BallsList.Clear();
                 }
                 Disposed = true;
-            } else
-                throw new ObjectDisposedException(nameof(DataImplementation));
+            }
+            else
+            {
+              throw new ObjectDisposedException(nameof(DataImplementation));
+            }
         }
 
         public override void Dispose()
@@ -88,7 +95,11 @@ namespace TP.ConcurrentProgramming.Data {
           double vely
         )
         {
-            BallsList.Add(new Ball(new Vector(posx, posy), new Vector(velx, vely)));
+          Vector position = new(posx, posy);
+          Vector velocity = new(velx, vely);
+          Ball ball = new(position, velocity);
+
+          BallsList.Add(ball);
         }
 
 
