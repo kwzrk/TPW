@@ -56,55 +56,39 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
       Assert.AreEqual<int>(0, viewModel.Balls.Count);
     }
 
-
     private class ModelNullFixture : ModelAbstractApi
     {
-
       internal int Disposed = 0;
       internal int Started = 0;
       internal int Subscribed = 0;
-
-
-
       public override void Dispose()
       {
         Disposed++;
       }
-
       public override void Start(int numberOfBalls)
       {
         Started = numberOfBalls;
       }
-
       public override IDisposable Subscribe(IObserver<ModelIBall> observer)
       {
         Subscribed++;
         return new NullDisposable();
       }
-
-
-
       private class NullDisposable : IDisposable
       {
         public void Dispose()
         { }
       }
-
     }
 
     private class ModelSimulatorFixture : ModelAbstractApi
     {
-
       internal bool Disposed = false;
-
-
 
       public ModelSimulatorFixture()
       {
-        eventObservable = Observable.FromEventPattern<BallChaneEventArgs>(this, "BallChanged");
+        eventObservable = Observable.FromEventPattern<BallChangeEventArgs>(this, "BallChanged");
       }
-
-
 
       public override IDisposable? Subscribe(IObserver<ModelIBall> observer)
       {
@@ -116,7 +100,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
         for (int i = 0; i < numberOfBalls; i++)
         {
           ModelBall newBall = new ModelBall(0, 0) { };
-          BallChanged?.Invoke(this, new BallChaneEventArgs() { Ball = newBall });
+          BallChanged?.Invoke(this, new BallChangeEventArgs() { Ball = newBall });
         }
       }
 
@@ -125,33 +109,20 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
         Disposed = true;
       }
 
-
-
-      public event EventHandler<BallChaneEventArgs> BallChanged;
-
-
-
-      private IObservable<EventPattern<BallChaneEventArgs>>? eventObservable = null;
-
+      public event EventHandler<BallChangeEventArgs> BallChanged;
+      private IObservable<EventPattern<BallChangeEventArgs>>? eventObservable = null;
       private class ModelBall : ModelIBall
       {
         public ModelBall(double top, double left)
         { }
-
-
         public double Diameter => throw new NotImplementedException();
 
         public double Top => throw new NotImplementedException();
 
         public double Left => throw new NotImplementedException();
 
-
         public event PropertyChangedEventHandler? PropertyChanged;
-
-
       }
-
     }
-
   }
 }

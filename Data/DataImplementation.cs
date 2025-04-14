@@ -10,113 +10,143 @@
 
 using System.Diagnostics;
 
-namespace TP.ConcurrentProgramming.Data {
-    internal class DataImplementation : DataAbstractAPI {
-        //private bool disposedValue;
-        private bool Disposed = false;
-        private readonly Timer MoveTimer;
-        private Random RandomGenerator = new();
-        private List<Ball> BallsList = [];
+namespace TP.ConcurrentProgramming.Data
+{
+  internal class DataImplementation : DataAbstractAPI
+  {
+    //private bool disposedValue;
+    private bool Disposed = false;
+    private readonly Timer MoveTimer;
+    private Random RandomGenerator = new();
+    private List<Ball> BallsList = [];
 
-        public DataImplementation()
-        {
-            MoveTimer = new Timer(
-              Move,
-              null,
-              TimeSpan.Zero,
-              TimeSpan.FromMilliseconds(100)
-            );
-        }
+    public DataImplementation()
+    {
+      MoveTimer = new Timer(
+        Move,
+        null,
+        TimeSpan.Zero,
+        TimeSpan.FromMilliseconds(100)
+      );
+    }
 
-        public override void Start(
-          int numberOfBalls,
-          Action<IVector, IBall> upperLayerHandler
-        )
-        {
-            if (Disposed)
-              throw new ObjectDisposedException(nameof(DataImplementation));
+    public override void Start(
+      int numberOfBalls,
+      Action<IVector, IBall> upperLayerHandler
+    )
+    {
+      ObjectDisposedException.ThrowIf(Disposed, nameof(DataImplementation));
+      ArgumentNullException.ThrowIfNull(upperLayerHandler);
 
-            if (upperLayerHandler == null)
-              throw new ArgumentNullException(nameof(upperLayerHandler));
+      foreach (var _ in Enumerable.Range(0, numberOfBalls))
+      {
+        Vector startingPosition = new(
+          RandomGenerator.Next(100, 400 - 100),
+          RandomGenerator.Next(100, 400 - 100)
+        );
 
-            Random random = new Random();
+        Vector initialVelocity = new(
+          RandomGenerator.NextDouble() - 0.5 * 3,
+          RandomGenerator.NextDouble() - 0.5 * 3
+        );
 
-            foreach (var _ in Enumerable.Range(0, numberOfBalls))
-            {
-                Vector startingPosition = new(
-                  random.Next(100, 400 - 100),
-                  random.Next(100, 400 - 100)
-                );
-                Ball newBall = new(startingPosition, startingPosition);
-                upperLayerHandler(startingPosition, newBall);
-                BallsList.Add(newBall);
-            };
-        }
+        double radius = 20;
 
+        Ball newBall = new(startingPosition, initialVelocity, radius);
+        upperLayerHandler(startingPosition, newBall);
+        BallsList.Add(newBall);
+      };
+    }
 
-        protected virtual void Dispose(bool disposing) {
-            if (!Disposed)
-            {
-                if (disposing)
-                {
-                    MoveTimer.Dispose();
-                    BallsList.Clear();
-                }
-                Disposed = true;
-            }
-            else
-            {
-              throw new ObjectDisposedException(nameof(DataImplementation));
-            }
-        }
+    public override Dimensions GetDimensions()
+    {
+      return DataAbstractAPI.Dimensions;
+    }
 
-        public override void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
+    public override void SpawnBall(Action<IVector, IBall> upperLayerHandler)
+    {
+      ObjectDisposedException.ThrowIf(Disposed, nameof(DataImplementation));
+      ArgumentNullException.ThrowIfNull(upperLayerHandler);
 
-        private void Move(object? x)
-        {
-            foreach (Ball item in BallsList)
-            {
-              item.MoveTowards(new Vector(
-                    (RandomGenerator.NextDouble() - 0.5) * 10,
-                    (RandomGenerator.NextDouble() - 0.5) * 10
-              ));
-            }
-        }
+      Vector startingPosition = new(
+        RandomGenerator.Next(100, 400 - 100),
+        RandomGenerator.Next(100, 400 - 100)
+      );
 
-        public override void CreateBall(
-          double posx,
-          double posy,
-          double velx,
-          double vely
-        )
-        {
-          Vector position = new(posx, posy);
-          Vector velocity = new(velx, vely);
-          Ball ball = new(position, velocity);
+      double radius = RandomGenerator.Next(5, 30);
 
-          BallsList.Add(ball);
-        }
+      Ball newBall = new(startingPosition, startingPosition, radius);
+      upperLayerHandler(startingPosition, newBall);
+      BallsList.Add(newBall);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+      ObjectDisposedException.ThrowIf(Disposed, nameof(DataImplementation));
+
+      if (disposing)
+      {
+        MoveTimer.Dispose();
+        BallsList.Clear();
+      }
+
+      Disposed = true;
+    }
+
+    public override IVector CreateVector(double x, double y)
+    {
+      if (Disposed)
+        throw new ObjectDisposedException(nameof(DataImplementation));
+      return new Vector(x, y);
+    }
 
 
-        [Conditional("DEBUG")]
-        internal void CheckBallsList(Action<IEnumerable<IBall>> returnBallsList) {
-            returnBallsList(BallsList);
-        }
+    public override void Dispose()
+    {
+      // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+      Dispose(disposing: true);
+      GC.SuppressFinalize(this);
+    }
 
-        [Conditional("DEBUG")]
-        internal void CheckNumberOfBalls(Action<int> returnNumberOfBalls) {
-            returnNumberOfBalls(BallsList.Count);
-        }
+    private void Move(object? x)
+    {
+      BallsList.ForEach(x => x.Move());
+    }
 
-        [Conditional("DEBUG")]
-        internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed) {
-            returnInstanceDisposed(Disposed);
-        }
+
+    public override List<IBall> GetBalls()
+    {
+      return BallsList.Select(n => (IBall)n).ToList();
+    }
+
+
+    [Conditional("DEBUG")]
+    internal void CheckBallsList(Action<IEnumerable<IBall>> returnBallsList)
+    {
+      returnBallsList(BallsList);
+    }
+
+    [Conditional("DEBUG")]
+    internal void CheckNumberOfBalls(Action<int> returnNumberOfBalls)
+    {
+      returnNumberOfBalls(BallsList.Count);
+    }
+
+    [Conditional("DEBUG")]
+    internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)
+    {
+      returnInstanceDisposed(Disposed);
+    }
+  }
+
+  public class CollisionEventArgs : EventArgs
+  {
+    public CollisionEventArgs(IBall b1, IBall? b2)
+    {
 
     }
+
+    public IBall Ball1 { get; }
+    public IBall Ball2 { get; }
+  }
 }

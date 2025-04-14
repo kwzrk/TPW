@@ -10,39 +10,60 @@
 
 namespace TP.ConcurrentProgramming.Data
 {
-    internal class Ball : IBall
+  internal class Ball : IBall
+  {
+    private readonly object _lock = new object();
+    private Vector _position;
+    private Vector _velocity;
+
+    public event EventHandler<IVector>? NewPositionNotification;
+    public IVector Velocity
     {
+      get => _velocity;
+      set
+      {
+        lock (_lock) _velocity = (Vector)value;
+      }
 
-        private readonly object _lock = new object();
-        private Vector _position;
-        private Vector _velocity;
-        public IVector Velocity
-        {
-            get => _velocity;
-            set
-            {
-                lock (_lock) _velocity = (Vector)value;
-            }
-
-        }
-
-        internal Ball(Vector initialPosition, Vector initialVelocity)
-        {
-            _position = initialPosition;
-            _velocity = initialVelocity;
-        }
-
-        public event EventHandler<IVector>? NewPositionNotification;
-
-        private void RaiseNewPositionChangeNotification()
-        {
-            NewPositionNotification?.Invoke(this, _position);
-        }
-
-        internal void MoveTowards(Vector delta)
-        {
-            _position = _position.add(delta);
-            RaiseNewPositionChangeNotification();
-        }
     }
+
+    public IVector Position
+    {
+      get => _position;
+      set
+      {
+        lock (_lock) _position = (Vector)value;
+      }
+    }
+
+    public double Radius => _radius;
+    private readonly double _radius;
+
+    public bool IsColliding(IBall withOther)
+    {
+      double dist = Math.Sqrt(Math.Pow(withOther.Position.x - Position.x, 2) +
+                             Math.Pow(withOther.Position.y - Position.y, 2));
+      if (dist <= Radius) return true;
+      return false;
+    }
+
+
+    internal Ball(Vector initialPosition, Vector initialVelocity, double radius)
+    {
+      _position = initialPosition;
+      _velocity = initialVelocity;
+      _radius = radius;
+    }
+
+    private void RaisePositionChangeNotification()
+    {
+      NewPositionNotification?.Invoke(this, _position);
+    }
+
+    internal void Move()
+    {
+      _position = _position.add(_velocity);
+      RaisePositionChangeNotification();
+    }
+  }
 }

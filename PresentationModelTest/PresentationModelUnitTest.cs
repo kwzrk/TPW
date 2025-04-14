@@ -56,12 +56,9 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
       internal bool Disposed = false;
       internal int NumberOfBalls = 0;
 
-      public override void CreateBall(
-        IPosition position,
-        IPosition velocity
-      )
+      public override void SpawnBall(Action<IPosition, BusinessLogic.IBall> upperLayerHandler)
       {
-          throw new NotImplementedException();
+        throw new NotImplementedException();
       }
 
       public override void Dispose()
@@ -71,12 +68,12 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
 
       public override IEnumerable<BusinessLogic.IBall> GetBallsList()
       {
-          throw new NotImplementedException();
+        throw new NotImplementedException();
       }
 
       public override void MoveBalls()
       {
-          throw new NotImplementedException();
+        throw new NotImplementedException();
       }
 
       public override void Start(

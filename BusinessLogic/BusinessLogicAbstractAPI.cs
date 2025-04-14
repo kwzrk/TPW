@@ -8,62 +8,32 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
-namespace TP.ConcurrentProgramming.BusinessLogic {
-    public abstract class BusinessLogicAbstractAPI : IDisposable
-    {
-      private static Lazy<BusinessLogicAbstractAPI> modelInstance =
-                       new Lazy<BusinessLogicAbstractAPI>(
-                         () => new BusinessLogicImplementation()
-                       );
-
-      public static
-        BusinessLogicAbstractAPI GetBusinessLogicLayer()
-        {
-          return modelInstance.Value;
-        }
-
-      public static readonly
-        Dimensions GetDimensions = new(10.0, 10.0, 10.0);
-
-      public abstract void Start
-      (
-        int numberOfBalls,
-        Action<IPosition, IBall> upperLayerHandler
-      );
-
-      public abstract void Dispose();
-
-      public abstract void CreateBall
-      (
-        IPosition position,
-        IPosition velocity
-      );
-
-      public abstract IEnumerable<IBall> GetBallsList();
-      public abstract void MoveBalls();
-    }
-    /// <summary>
-    /// Immutable type representing table dimensions
-    /// </summary>
-    /// <param name="BallDimension"></param>
-    /// <param name="TableHeight"></param>
-    /// <param name="TableWidth"></param>
-    /// <remarks>
-    /// Must be abstract
-    /// </remarks>
-    public record Dimensions(
-      double BallDimension,
-      double TableHeight,
-      double TableWidth
+namespace TP.ConcurrentProgramming.BusinessLogic
+{
+  public abstract class BusinessLogicAbstractAPI : IDisposable
+  {
+    private static
+    Lazy<BusinessLogicAbstractAPI> modelInstance = new Lazy<BusinessLogicAbstractAPI>(
+      () => new BusinessLogicImplementation()
     );
+    public static BusinessLogicAbstractAPI GetBusinessLogicLayer() { return modelInstance.Value; }
 
-    public interface IPosition
-    {
-        double x { get; init; }
-        double y { get; init; }
-    }
-    public interface IBall
-    {
-        event EventHandler<IPosition> NewPositionNotification;
-    }
+    public abstract void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler);
+    public abstract void Dispose();
+    public abstract void SpawnBall(Action<IPosition, IBall> upperLayerHandler);
+    public abstract void MoveBalls();
+
+    public abstract IEnumerable<IBall> GetBallsList();
+  }
+
+  public interface IPosition
+  {
+    double x { get; init; }
+    double y { get; init; }
+  }
+  public interface IBall
+  {
+    event EventHandler<IPosition> NewPositionNotification;
+  }
+
 }
