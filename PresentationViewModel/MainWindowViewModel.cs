@@ -25,6 +25,18 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel {
         public double TableHeight => ModelLayer.getHeight();
         public double TableWidth => ModelLayer.getWidth();
 
+        /// <summary>
+        /// Adding number of balls 
+        /// </summary>
+        private int _numberOfBalls;
+        public int NumberOfBalls {
+            get => _numberOfBalls;
+            set {
+                _numberOfBalls = value;
+                RaisePropertyChanged();
+            }
+        }
+        public ICommand StartCommand { get; }
 
         public MainWindowViewModel() : this(null) { }
 
@@ -32,8 +44,17 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel {
             ModelLayer = modelLayerAPI == null ? ModelAbstractApi.CreateModel() : modelLayerAPI;
             Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
             //AddBallCommand = new RelayCommand(AddBall);
+
+            StartCommand = new RelayCommand(StartSimulation);
         }
 
+        private void StartSimulation() {
+            if (Disposed)
+                throw new ObjectDisposedException(nameof(MainWindowViewModel));
+            if (NumberOfBalls < 1)
+                throw new ArgumentOutOfRangeException(nameof(NumberOfBalls), "Number of balls must be greater than 0");
+            ModelLayer.Start(NumberOfBalls);
+        }
 
         public void Start(int numberOfBalls) {
             if (Disposed)
