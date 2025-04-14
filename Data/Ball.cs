@@ -8,35 +8,54 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
-namespace TP.ConcurrentProgramming.Data {
-    internal class Ball : IBall {
+using System.ComponentModel;
 
-        private readonly object _lock = new object();
-        private Vector _position;
-        private Vector _velocity;
+namespace TP.ConcurrentProgramming.Data {
+    internal class Ball : IBall, INotifyPropertyChanged {
+
+        public event EventHandler<IVector>? NewPositionNotification;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private IVector _velocity;
         public IVector Velocity {
-            get {
-                lock (_lock) return _velocity;
-            }
+            get => _velocity;
             set {
-                lock (_lock) _velocity = (Vector)value;
+                _velocity = value;
+                OnPropertyChanged(nameof(Velocity));
+            }
+        }
+
+        private IVector _position;
+        public IVector Position {
+            get => _position;
+            set {
+                _position = value;
+                OnPropertyChanged(nameof(Position));
             }
         }
 
         internal Ball(Vector initialPosition, Vector initialVelocity) {
             _position = initialPosition;
             _velocity = initialVelocity;
-
+            Position = initialPosition;
+            Velocity = initialVelocity;
+            RaiseNewPositionChangeNotification();
         }
 
-        public event EventHandler<IVector>? NewPositionNotification;
-
         private void RaiseNewPositionChangeNotification() {
-            NewPositionNotification?.Invoke(this, _position);
+            NewPositionNotification?.Invoke(this, Position);
+        }
+        protected virtual void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         internal void Move(Vector delta) {
-            _position = new Vector(_position.x + delta.x, _position.y + delta.y);
+            Position = new Vector(Position.x + delta.x, Position.y + delta.y);
+            RaiseNewPositionChangeNotification();
+        }
+
+        internal void Move() {
+            Position = new Vector(Position.x + Velocity.x, Position.y + Velocity.y);
             RaiseNewPositionChangeNotification();
         }
     }

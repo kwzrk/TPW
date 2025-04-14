@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using TP.ConcurrentProgramming.Presentation.Model;
 using TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight;
 using ModelIBall = TP.ConcurrentProgramming.Presentation.Model.IBall;
@@ -16,13 +17,22 @@ using ModelIBall = TP.ConcurrentProgramming.Presentation.Model.IBall;
 namespace TP.ConcurrentProgramming.Presentation.ViewModel {
     public class MainWindowViewModel : ViewModelBase, IDisposable {
 
+        private IDisposable Observer = null;
+        private ModelAbstractApi ModelLayer;
+        private bool Disposed = false;
+        public double TableHeight => ModelLayer.getHeight();
+        public double TableWidth => ModelLayer.getWidth();
+        public ObservableCollection<ModelIBall> Balls { get; } = new ObservableCollection<ModelIBall>();
+        public ICommand AddBallCommand { get; }
+
+
         public MainWindowViewModel() : this(null) { }
 
         internal MainWindowViewModel(ModelAbstractApi modelLayerAPI) {
             ModelLayer = modelLayerAPI == null ? ModelAbstractApi.CreateModel() : modelLayerAPI;
             Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
+            AddBallCommand = new RelayCommand(AddBall);
         }
-
 
 
         public void Start(int numberOfBalls) {
@@ -32,9 +42,9 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel {
             Observer.Dispose();
         }
 
-        public ObservableCollection<ModelIBall> Balls { get; } = new ObservableCollection<ModelIBall>();
-
-
+        private void AddBall() { 
+            ModelLayer.AddNewBall();
+        }
 
         protected virtual void Dispose(bool disposing) {
             if (!Disposed) {
@@ -56,12 +66,6 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
-
-
-
-        private IDisposable Observer = null;
-        private ModelAbstractApi ModelLayer;
-        private bool Disposed = false;
 
     }
 }

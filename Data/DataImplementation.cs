@@ -20,7 +20,7 @@ namespace TP.ConcurrentProgramming.Data {
         private List<Ball> BallsList = [];
 
         public DataImplementation() {
-            MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(10));
         }
 
         public override void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler) {
@@ -31,7 +31,14 @@ namespace TP.ConcurrentProgramming.Data {
             Random random = new Random();
             for (int i = 0; i < numberOfBalls; i++) {
                 Vector startingPosition = new(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
-                Ball newBall = new(startingPosition, startingPosition);
+
+                // Nadanie początkowej prędkości dla kul
+                Vector initialVelocity = new(
+                    (random.NextDouble() - 0.5) * 1,
+                    (random.NextDouble() - 0.5) * 1
+                 );
+
+                Ball newBall = new(startingPosition, initialVelocity);
                 upperLayerHandler(startingPosition, newBall);
                 BallsList.Add(newBall);
             }
@@ -54,9 +61,32 @@ namespace TP.ConcurrentProgramming.Data {
             GC.SuppressFinalize(this);
         }
 
+        public override IEnumerable<IBall> GetBalls() {
+            if (Disposed)
+                throw new ObjectDisposedException(nameof(DataImplementation));
+            return BallsList;
+        }
+
+        public override IVector CreateVector(double x, double y) {
+            if (Disposed)
+                throw new ObjectDisposedException(nameof(DataImplementation));
+            return new Vector(x, y);
+        }
+
+        public override void AddBall(IVector position, IVector velocity) {
+            if (Disposed)
+                throw new ObjectDisposedException(nameof(DataImplementation));
+            if (position == null || velocity == null)
+                throw new ArgumentNullException("Position and velocity cannot be null.");
+            Ball addBall = new Ball((Vector)position, (Vector)velocity);
+            BallsList.Add(addBall);
+        }
+
         private void Move(object? x) {
             foreach (Ball item in BallsList)
-                item.Move(new Vector((RandomGenerator.NextDouble() - 0.5) * 10, (RandomGenerator.NextDouble() - 0.5) * 10));
+                //item.Move(new Vector((RandomGenerator.NextDouble() - 0.5) * 3.0, (RandomGenerator.NextDouble() - 0.5) * 3.0));
+                item.Move();
+            OnPositionChanged();
         }
 
         [Conditional("DEBUG")]

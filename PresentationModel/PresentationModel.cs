@@ -11,6 +11,11 @@ using System;
 using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
+///
+using TP.ConcurrentProgramming.BusinessLogic;
+using TP.ConcurrentProgramming.Data;
+
+/// 
 using UnderneathLayerAPI = TP.ConcurrentProgramming.BusinessLogic.BusinessLogicAbstractAPI;
 
 namespace TP.ConcurrentProgramming.Presentation.Model {
@@ -18,6 +23,11 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
     /// Class Model - implements the <see cref="ModelAbstractApi" />
     /// </summary>
     internal class ModelImplementation : ModelAbstractApi {
+        public event EventHandler<BallChaneEventArgs> BallChanged;
+        private bool Disposed = false;
+        private readonly IObservable<EventPattern<BallChaneEventArgs>> eventObservable = null;
+        private readonly UnderneathLayerAPI layerBellow = null;
+
         internal ModelImplementation() : this(null) { }
 
         internal ModelImplementation(UnderneathLayerAPI underneathLayer) {
@@ -33,6 +43,21 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
             Disposed = true;
         }
 
+        //public override Dimensions GetDimensions() {
+        //    return UnderneathLayerAPI.GetDimensions;
+        //}
+
+        public override double getHeight() {
+            return (double)UnderneathLayerAPI.GetDimensions.TableHeight;
+        }
+        public override double getWidth() {
+            return (double)UnderneathLayerAPI.GetDimensions.TableWidth;
+        }
+
+        public override double getDiameter() {
+            return (double)UnderneathLayerAPI.GetDimensions.BallDimension;
+        }
+
         public override IDisposable Subscribe(IObserver<IBall> observer) {
             return eventObservable.Subscribe(x => observer.OnNext(x.EventArgs.Ball), ex => observer.OnError(ex), () => observer.OnCompleted());
         }
@@ -41,22 +66,22 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
             layerBellow.Start(numberOfBalls, StartHandler);
         }
 
-
-
-        public event EventHandler<BallChaneEventArgs> BallChanged;
-
-
-
-        private bool Disposed = false;
-        private readonly IObservable<EventPattern<BallChaneEventArgs>> eventObservable = null;
-        private readonly UnderneathLayerAPI layerBellow = null;
-
         private void StartHandler(BusinessLogic.IPosition position, BusinessLogic.IBall ball) {
-            ModelBall newBall = new ModelBall(position.x, position.y, ball) { Diameter = 20.0 };
+            ModelBall newBall = new ModelBall(position.x, position.y, ball) { Diameter = getDiameter() };
             BallChanged.Invoke(this, new BallChaneEventArgs() { Ball = newBall });
+            ball.NewPositionNotification += (sender, e) => {
+                BallChaneEventArgs args = new BallChaneEventArgs() { Ball = newBall };
+                BallChanged?.Invoke(this, args);
+            };
         }
 
-
+        public override void AddNewBall() {
+            BusinessLogic.IBall createdBall = layerBellow.CreateBall();
+            ModelBall newBall = new ModelBall(createdBall.Position.x, createdBall.Position.y, createdBall) {
+                Diameter = getDiameter()
+            };
+            BallChanged?.Invoke(this, new BallChaneEventArgs { Ball = newBall });
+        }
 
         [Conditional("DEBUG")]
         internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed) {

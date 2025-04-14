@@ -17,12 +17,17 @@ using LogicIBall = TP.ConcurrentProgramming.BusinessLogic.IBall;
 
 namespace TP.ConcurrentProgramming.Presentation.Model {
     internal class ModelBall : IBall {
+
+        public double Diameter { get; init; } = 0;
+        public event PropertyChangedEventHandler PropertyChanged;
+        private double TopBackingField;
+        private double LeftBackingField;
+
         public ModelBall(double top, double left, LogicIBall underneathBall) {
             TopBackingField = top;
             LeftBackingField = left;
             underneathBall.NewPositionNotification += NewPositionNotification;
         }
-
 
         public double Top {
             get { return TopBackingField; }
@@ -43,17 +48,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
                 RaisePropertyChanged();
             }
         }
-
-        public double Diameter { get; init; } = 0;
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-
-
-
-        private double TopBackingField;
-        private double LeftBackingField;
 
         private void NewPositionNotification(object sender, IPosition e) {
             Top = e.y; Left = e.x;

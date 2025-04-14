@@ -9,6 +9,7 @@
 //_____________________________________________________________________________________________________________________________________
 
 using System.Numerics;
+using TP.ConcurrentProgramming.Data;
 
 namespace TP.ConcurrentProgramming.BusinessLogic {
     public abstract class BusinessLogicAbstractAPI : IDisposable {
@@ -19,30 +20,20 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
             return modelInstance.Value;
         }
 
-        public static readonly Dimensions GetDimensions = new(10.0, 10.0, 10.0);
+        public static readonly Dimensions GetDimensions = new(10.0, 420.0, 400.0);
         public abstract void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler);
         public abstract void Dispose();
-
-        //public abstract void CreateBall(IPosition position, IPosition velocity);
-        //public abstract IEnumerable<IBall> GetBallsList();
-        //public abstract void MoveBalls();
+        public abstract void HandleCollisions();
+        public abstract IBall CreateBall();
 
     }
-    /// <summary>
-    /// Immutable type representing table dimensions
-    /// </summary>
-    /// <param name="BallDimension"></param>
-    /// <param name="TableHeight"></param>
-    /// <param name="TableWidth"></param>
-    /// <remarks>
-    /// Must be abstract
-    /// </remarks>
     public record Dimensions(double BallDimension, double TableHeight, double TableWidth);
     public interface IPosition {
         double x { get; init; }
         double y { get; init; }
     }
     public interface IBall {
+        IVector Position { get; set; }
         event EventHandler<IPosition> NewPositionNotification;
     }
 }

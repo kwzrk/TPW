@@ -8,13 +8,21 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using TP.ConcurrentProgramming.Data;
+
 namespace TP.ConcurrentProgramming.BusinessLogic {
     internal class Ball : IBall {
+        private readonly Data.IBall dataBall;
+        public event EventHandler<IPosition>? NewPositionNotification;
         public Ball(Data.IBall ball) {
+            this.dataBall = ball;
             ball.NewPositionNotification += RaisePositionChangeEvent;
         }
 
-        public event EventHandler<IPosition>? NewPositionNotification;
+        public IVector Position {
+            get => dataBall.Position;
+            set => dataBall.Position = value;
+        }
 
         private void RaisePositionChangeEvent(object? sender, Data.IVector e) {
             NewPositionNotification?.Invoke(this, new Position(e.x, e.y));
