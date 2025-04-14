@@ -10,7 +10,7 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <StackPanel>
-        <Button Content="dodaj" Command="{Binding AddBallCommand}" Width="100" Height="40"/>
+        <Button Content="dodaj" Width="100" Height="40"/>
         <Border BorderThickness="4" BorderBrush="Green" Height="{Binding TableHeight}" Width="{Binding TableWidth}">
             <ItemsControl ItemsSource="{Binding Balls}">
                 <ItemsControl.ItemsPanel>

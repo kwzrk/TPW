@@ -35,17 +35,12 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
             eventObservable = Observable.FromEventPattern<BallChaneEventArgs>(this, "BallChanged");
         }
 
-
         public override void Dispose() {
             if (Disposed)
                 throw new ObjectDisposedException(nameof(Model));
             layerBellow.Dispose();
             Disposed = true;
         }
-
-        //public override Dimensions GetDimensions() {
-        //    return UnderneathLayerAPI.GetDimensions;
-        //}
 
         public override double getHeight() {
             return (double)UnderneathLayerAPI.GetDimensions.TableHeight;
@@ -69,19 +64,23 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
         private void StartHandler(BusinessLogic.IPosition position, BusinessLogic.IBall ball) {
             ModelBall newBall = new ModelBall(position.x, position.y, ball) { Diameter = getDiameter() };
             BallChanged.Invoke(this, new BallChaneEventArgs() { Ball = newBall });
-            ball.NewPositionNotification += (sender, e) => {
-                BallChaneEventArgs args = new BallChaneEventArgs() { Ball = newBall };
-                BallChanged?.Invoke(this, args);
-            };
+            /// Notify the observers about the new ball
+            //ball.NewPositionNotification += (sender, e) => {
+            //    BallChaneEventArgs args = new BallChaneEventArgs() { Ball = newBall };
+            //    BallChanged?.Invoke(this, args);
+            //};
         }
 
-        public override void AddNewBall() {
-            BusinessLogic.IBall createdBall = layerBellow.CreateBall();
-            ModelBall newBall = new ModelBall(createdBall.Position.x, createdBall.Position.y, createdBall) {
-                Diameter = getDiameter()
-            };
-            BallChanged?.Invoke(this, new BallChaneEventArgs { Ball = newBall });
-        }
+        /// <summary>
+        /// Creates a new ball and notifies the observers about the change.
+        /// </summary>
+        //public override void AddNewBall() {
+        //    BusinessLogic.IBall createdBall = layerBellow.CreateBall();
+        //    ModelBall newBall = new ModelBall(createdBall.Position.x, createdBall.Position.y, createdBall) {
+        //        Diameter = getDiameter()
+        //    };
+        //    BallChanged?.Invoke(this, new BallChaneEventArgs { Ball = newBall });
+        //}
 
         [Conditional("DEBUG")]
         internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed) {

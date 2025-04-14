@@ -35,7 +35,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
                 throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
             // odsubskrybowanie kolizji
             layerBellow.PositionChanged -= (sender, e) => HandleCollisions();
-            
             layerBellow.Dispose();
             Disposed = true;
         }
@@ -72,20 +71,20 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
             }
         }
 
-        public override IBall CreateBall() {
-            if (Disposed)
-                throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
-            Random random = new Random();
+        //public override IBall CreateBall() {
+        //    if (Disposed)
+        //        throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
+        //    Random random = new Random();
             
-            IVector startingPosition = layerBellow.CreateVector(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
-            IVector velocity = layerBellow.CreateVector((random.NextDouble() - 0.5) * 1, (random.NextDouble() - 0.5) * 1);
+        //    IVector startingPosition = layerBellow.CreateVector(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
+        //    IVector velocity = layerBellow.CreateVector((random.NextDouble() - 0.5) * 1, (random.NextDouble() - 0.5) * 1);
             
-            layerBellow.AddBall(startingPosition,velocity);
+        //    layerBellow.AddBall(startingPosition,velocity);
             
-            Data.IBall dataBall = layerBellow.GetBalls().Last();
+        //    Data.IBall dataBall = layerBellow.GetBalls().Last();
             
-            return new Ball(dataBall);
-        }
+        //    return new Ball(dataBall);
+        //}
 
         [Conditional("DEBUG")]
         internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed) {

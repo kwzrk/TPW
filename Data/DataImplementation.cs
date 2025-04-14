@@ -73,14 +73,14 @@ namespace TP.ConcurrentProgramming.Data {
             return new Vector(x, y);
         }
 
-        public override void AddBall(IVector position, IVector velocity) {
-            if (Disposed)
-                throw new ObjectDisposedException(nameof(DataImplementation));
-            if (position == null || velocity == null)
-                throw new ArgumentNullException("Position and velocity cannot be null.");
-            Ball addBall = new Ball((Vector)position, (Vector)velocity);
-            BallsList.Add(addBall);
-        }
+        //public override void AddBall(IVector position, IVector velocity) {
+        //    if (Disposed)
+        //        throw new ObjectDisposedException(nameof(DataImplementation));
+        //    if (position == null || velocity == null)
+        //        throw new ArgumentNullException("Position and velocity cannot be null.");
+        //    Ball addBall = new Ball((Vector)position, (Vector)velocity);
+        //    BallsList.Add(addBall);
+        //}
 
         private void Move(object? x) {
             foreach (Ball item in BallsList)

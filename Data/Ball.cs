@@ -11,32 +11,41 @@
 using System.ComponentModel;
 
 namespace TP.ConcurrentProgramming.Data {
-    internal class Ball : IBall, INotifyPropertyChanged {
+    internal class Ball : IBall {
 
         public event EventHandler<IVector>? NewPositionNotification;
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private IVector _velocity;
+        
         public IVector Velocity {
-            get => _velocity;
-            set {
-                _velocity = value;
-                OnPropertyChanged(nameof(Velocity));
-            }
+            get;
+            set;
+        }
+        public IVector Position {
+            get;
+            set;
         }
 
-        private IVector _position;
-        public IVector Position {
-            get => _position;
-            set {
-                _position = value;
-                OnPropertyChanged(nameof(Position));
-            }
-        }
+        //public event PropertyChangedEventHandler? PropertyChanged;
+        //private IVector _velocity;
+        //public IVector Velocity {
+        //    get => _velocity;
+        //    set {
+        //        _velocity = value;
+        //        OnPropertyChanged(nameof(Velocity));
+        //    }
+        //}
+
+        //private IVector _position;
+        //public IVector Position {
+        //    get => _position;
+        //    set {
+        //        _position = value;
+        //        OnPropertyChanged(nameof(Position));
+        //    }
+        //}
 
         internal Ball(Vector initialPosition, Vector initialVelocity) {
-            _position = initialPosition;
-            _velocity = initialVelocity;
+            //_position = initialPosition;
+            //_velocity = initialVelocity;
             Position = initialPosition;
             Velocity = initialVelocity;
             RaiseNewPositionChangeNotification();
@@ -45,9 +54,9 @@ namespace TP.ConcurrentProgramming.Data {
         private void RaiseNewPositionChangeNotification() {
             NewPositionNotification?.Invoke(this, Position);
         }
-        protected virtual void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //protected virtual void OnPropertyChanged(string propertyName) {
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
 
         internal void Move(Vector delta) {
             Position = new Vector(Position.x + delta.x, Position.y + delta.y);

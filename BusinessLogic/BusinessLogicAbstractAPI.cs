@@ -24,7 +24,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
         public abstract void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler);
         public abstract void Dispose();
         public abstract void HandleCollisions();
-        public abstract IBall CreateBall();
+        //public abstract IBall CreateBall();
 
     }
     public record Dimensions(double BallDimension, double TableHeight, double TableWidth);
@@ -33,7 +33,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
         double y { get; init; }
     }
     public interface IBall {
-        IVector Position { get; set; }
+        //IVector Position { get; set; }
         event EventHandler<IPosition> NewPositionNotification;
     }
 }

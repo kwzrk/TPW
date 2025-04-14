@@ -30,7 +30,7 @@ namespace TP.ConcurrentProgramming.Data {
 
         public abstract IEnumerable<IBall> GetBalls();
         public abstract IVector CreateVector(double x, double y);
-        public abstract void AddBall(IVector position, IVector velocity);
+        //public abstract void AddBall(IVector position, IVector velocity);
     }
 
     public interface IVector {

@@ -32,7 +32,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
         public abstract double getWidth();
         public abstract double getDiameter();
 
-        public abstract void AddNewBall();
+        //public abstract void AddNewBall();
 
         private static Lazy<ModelAbstractApi> modelInstance = new Lazy<ModelAbstractApi>(() => new ModelImplementation());
 

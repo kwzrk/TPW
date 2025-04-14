@@ -20,10 +20,10 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel {
         private IDisposable Observer = null;
         private ModelAbstractApi ModelLayer;
         private bool Disposed = false;
+        public ObservableCollection<ModelIBall> Balls { get; } = new ObservableCollection<ModelIBall>();
+        //public ICommand AddBallCommand { get; }
         public double TableHeight => ModelLayer.getHeight();
         public double TableWidth => ModelLayer.getWidth();
-        public ObservableCollection<ModelIBall> Balls { get; } = new ObservableCollection<ModelIBall>();
-        public ICommand AddBallCommand { get; }
 
 
         public MainWindowViewModel() : this(null) { }
@@ -31,7 +31,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel {
         internal MainWindowViewModel(ModelAbstractApi modelLayerAPI) {
             ModelLayer = modelLayerAPI == null ? ModelAbstractApi.CreateModel() : modelLayerAPI;
             Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
-            AddBallCommand = new RelayCommand(AddBall);
+            //AddBallCommand = new RelayCommand(AddBall);
         }
 
 
@@ -42,9 +42,9 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel {
             Observer.Dispose();
         }
 
-        private void AddBall() { 
-            ModelLayer.AddNewBall();
-        }
+        //private void AddBall() { 
+        //    ModelLayer.AddNewBall();
+        //}
 
         protected virtual void Dispose(bool disposing) {
             if (!Disposed) {
