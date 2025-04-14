@@ -23,7 +23,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
 
         internal MainWindowViewModel(ModelAbstractApi modelLayerAPI)
         {
-            ModelLayer ??= ModelAbstractApi.CreateModel();
+            ModelLayer = modelLayerAPI ?? ModelAbstractApi.CreateModel();
             Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
         }
 

@@ -17,7 +17,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic {
         private readonly UnderneathLayerAPI layerBellow;
         public BusinessLogicImplementation() : this(null) { }
         internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer) {
-            layerBellow ??= UnderneathLayerAPI.GetDataLayer();
+            layerBellow = underneathLayer ?? UnderneathLayerAPI.GetDataLayer();
         }
         public override void Dispose() {
             if (Disposed)

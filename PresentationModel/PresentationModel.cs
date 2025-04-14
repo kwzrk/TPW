@@ -28,7 +28,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model {
 
 
         internal ModelImplementation(UnderneathLayerAPI underneathLayer) {
-          layerBellow ??= UnderneathLayerAPI.GetBusinessLogicLayer();
+          layerBellow = underneathLayer ?? UnderneathLayerAPI.GetBusinessLogicLayer();
 
           eventObservable = Observable
             .FromEventPattern<BallChaneEventArgs>(this, "BallChanged");
