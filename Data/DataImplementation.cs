@@ -24,7 +24,7 @@ namespace TP.ConcurrentProgramming.Data {
               Move,
               null,
               TimeSpan.Zero,
-              TimeSpan.FromMilliseconds(20)
+              TimeSpan.FromMilliseconds(50)
             );
         }
 
@@ -34,16 +34,15 @@ namespace TP.ConcurrentProgramming.Data {
         ) {
             ObjectDisposedException.ThrowIf(Disposed, nameof(DataImplementation));
             ArgumentNullException.ThrowIfNull(upperLayerHandler);
-
             foreach (var _ in Enumerable.Range(0, numberOfBalls)) {
                 Vector startingPosition = new(
-                  RandomGenerator.Next(100, 400 - 100),
-                  RandomGenerator.Next(100, 400 - 100)
+                  RandomGenerator.Next(10, 400),
+                  RandomGenerator.Next(10, 400)
                 );
 
                 Vector initialVelocity = new(
-                  RandomGenerator.NextDouble() - 0.5 * 5,
-                  RandomGenerator.NextDouble() - 0.5 * 5
+                  RandomGenerator.NextDouble() - 0.5 * 10,
+                  RandomGenerator.NextDouble() - 0.5 * 10
                 );
 
                 double radius = 20;
@@ -52,7 +51,6 @@ namespace TP.ConcurrentProgramming.Data {
                 upperLayerHandler(startingPosition, newBall);
                 BallsList.Add(newBall);
             }
-            ;
         }
 
         public override Dimensions GetDimensions() {
@@ -100,8 +98,9 @@ namespace TP.ConcurrentProgramming.Data {
         }
 
         private void Move(object? x) {
-            lock (_lock) {
-                BallsList.ForEach(x => x.Move());
+            //BallsList.ForEach(x => x.Move());
+            foreach(var y in BallsList) {
+                y.Move();  
             }
         }
 
