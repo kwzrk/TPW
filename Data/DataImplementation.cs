@@ -26,7 +26,7 @@ namespace TP.ConcurrentProgramming.Data
         Move,
         null,
         TimeSpan.Zero,
-        TimeSpan.FromMilliseconds(100)
+        TimeSpan.FromMilliseconds(20)
       );
     }
 
@@ -46,8 +46,8 @@ namespace TP.ConcurrentProgramming.Data
         );
 
         Vector initialVelocity = new(
-          RandomGenerator.NextDouble() - 0.5 * 3,
-          RandomGenerator.NextDouble() - 0.5 * 3
+          RandomGenerator.NextDouble() - 0.5 * 5,
+          RandomGenerator.NextDouble() - 0.5 * 5
         );
 
         double radius = 20;

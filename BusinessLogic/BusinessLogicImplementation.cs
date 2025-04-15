@@ -56,7 +56,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
       if (
           (pos.x - src.Radius < 0 && src.Velocity.x < 0) ||
-          (pos.x + src.Radius > dim.TableHeight && src.Velocity.x > 0))
+          (pos.x + src.Radius > dim.TableWidth && src.Velocity.x > 0))
       {
         InvokeWallCollision(src, isHorizontal: true);
         return;
@@ -64,7 +64,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       if (
         (pos.y - src.Radius < 0 &&
           src.Velocity.y < 0) ||
-        (pos.y + src.Radius > dim.TableWidth &&
+        (pos.y + src.Radius > dim.TableHeight &&
           src.Velocity.y > 0))
       {
         InvokeWallCollision(src, isHorizontal: false);
