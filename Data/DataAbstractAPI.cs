@@ -15,9 +15,6 @@ namespace TP.ConcurrentProgramming.Data
     private static Lazy<DataAbstractAPI> modelInstance =
       new Lazy<DataAbstractAPI>(() => new DataImplementation());
 
-    public static readonly Dimensions Dimensions = new(20.0, 420.0, 400.0);
-    public abstract Dimensions GetDimensions();
-
     public static DataAbstractAPI GetDataLayer()
     {
       return modelInstance.Value;
@@ -27,22 +24,19 @@ namespace TP.ConcurrentProgramming.Data
     public abstract void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler);
     public abstract void SpawnBall(Action<IVector, IBall> upperLayerHandler);
     public abstract IVector CreateVector(double x, double y);
+    public abstract IDimensions GetDimensions();
 
     public abstract List<IBall> GetBalls();
-
-    public event EventHandler? PositionChanged;
-
-    protected void OnPositionChanged()
-    {
-      PositionChanged?.Invoke(this, EventArgs.Empty);
-    }
   }
 
-  public record Dimensions(
-    double BallDimension,
-    double TableHeight,
-    double TableWidth
-  );
+  public interface IDimensions
+  {
+    double Radius { get; init; }
+
+    double Height { get; init; }
+
+    double Width { get; init; }
+  }
 
   public interface IVector
   {
@@ -57,8 +51,7 @@ namespace TP.ConcurrentProgramming.Data
   {
     event EventHandler<IVector> NewPositionNotification;
     IVector Velocity { get; set; }
-    IVector Position { get; set; }
+    IVector Position { get; }
     double Radius { get; }
-    public bool IsColliding(IBall ball2);
   }
 }

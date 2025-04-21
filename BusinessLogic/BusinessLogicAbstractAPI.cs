@@ -36,4 +36,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic
     event EventHandler<IPosition> NewPositionNotification;
   }
 
+  public interface IDimensions
+  {
+    double BallDimension { get; init; }
+    double TableWidth { get; init; }
+    double TableHeight { get; init; }
+  }
 }

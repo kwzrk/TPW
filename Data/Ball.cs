@@ -24,28 +24,23 @@ namespace TP.ConcurrentProgramming.Data
       {
         lock (_lock) _velocity = (Vector)value;
       }
-
     }
 
     public IVector Position
     {
       get => _position;
-      set
-      {
-        lock (_lock) _position = (Vector)value;
-      }
     }
 
     public double Radius => _radius;
     private readonly double _radius;
 
-    public bool IsColliding(IBall withOther)
-    {
-      double dist = Math.Sqrt(Math.Pow(withOther.Position.x - Position.x, 2) +
-                             Math.Pow(withOther.Position.y - Position.y, 2));
-      if (dist <= Radius) return true;
-      return false;
-    }
+    // public bool IsColliding(IBall withOther)
+    // {
+    //   double dist = Math.Sqrt(Math.Pow(withOther.Position.x - Position.x, 2) +
+    //                          Math.Pow(withOther.Position.y - Position.y, 2));
+    //   if (dist <= Radius) return true;
+    //   return false;
+    // }
 
 
     internal Ball(Vector initialPosition, Vector initialVelocity, double radius)
