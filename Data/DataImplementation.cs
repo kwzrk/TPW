@@ -60,9 +60,14 @@ namespace TP.ConcurrentProgramming.Data
         RandomGenerator.Next(100, 400 - 100)
       );
 
-      double radius = RandomGenerator.Next(5, 30);
+      Vector initialVelocity = new(
+        RandomGenerator.NextDouble() - 0.5 * 10,
+        RandomGenerator.NextDouble() - 0.5 * 10
+      );
 
-      Ball newBall = new(startingPosition, startingPosition, radius);
+      double radius = 20;
+
+      Ball newBall = new(startingPosition, initialVelocity, radius);
       upperLayerHandler(startingPosition, newBall);
       BallsList.Add(newBall);
     }
