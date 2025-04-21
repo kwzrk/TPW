@@ -12,8 +12,7 @@ namespace TP.ConcurrentProgramming.Data
 {
   public abstract class DataAbstractAPI : IDisposable
   {
-    private static Lazy<DataAbstractAPI> modelInstance =
-      new Lazy<DataAbstractAPI>(() => new DataImplementation());
+    private static Lazy<DataAbstractAPI> modelInstance = new Lazy<DataAbstractAPI>(() => new DataImplementation());
 
     public static DataAbstractAPI GetDataLayer()
     {
@@ -25,16 +24,13 @@ namespace TP.ConcurrentProgramming.Data
     public abstract void SpawnBall(Action<IVector, IBall> upperLayerHandler);
     public abstract IVector CreateVector(double x, double y);
     public abstract IDimensions GetDimensions();
-
     public abstract List<IBall> GetBalls();
   }
 
   public interface IDimensions
   {
     double Radius { get; init; }
-
     double Height { get; init; }
-
     double Width { get; init; }
   }
 

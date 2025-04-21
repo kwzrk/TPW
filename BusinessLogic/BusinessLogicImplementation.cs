@@ -62,10 +62,8 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         return;
       }
       if (
-        (pos.y - src.Radius < 0 &&
-          src.Velocity.y < 0) ||
-        (pos.y + src.Radius > dim.Height &&
-          src.Velocity.y > 0))
+        (pos.y - src.Radius < 0 && src.Velocity.y < 0) ||
+        (pos.y + src.Radius > dim.Height && src.Velocity.y > 0))
       {
         InvokeWallCollision(src, isHorizontal: false);
         return;
@@ -106,7 +104,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       if (isHorizontal)
       {
         // ball.Velocity = layerBellow.CreateVector(-ball.Velocity.x, ball.Velocity.y);
-        // ball.Velocity = 0;
         ball.Velocity = layerBellow.CreateVector(0, 0);
       }
       else
