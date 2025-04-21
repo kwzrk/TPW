@@ -33,8 +33,8 @@ namespace TP.ConcurrentProgramming.Data
       foreach (var _ in Enumerable.Range(0, numberOfBalls))
       {
         Vector startingPosition = new(
-          RandomGenerator.Next(10, 400),
-          RandomGenerator.Next(10, 400)
+          RandomGenerator.Next(10, _dimensions.Width - 50),
+          RandomGenerator.Next(10, _dimensions.Height - 50)
         );
 
         Vector initialVelocity = new(

@@ -30,8 +30,8 @@ namespace TP.ConcurrentProgramming.Data
   public interface IDimensions
   {
     double Radius { get; init; }
-    double Height { get; init; }
-    double Width { get; init; }
+    int Height { get; init; }
+    int Width { get; init; }
   }
 
   public interface IVector

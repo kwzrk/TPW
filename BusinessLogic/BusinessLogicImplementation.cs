@@ -55,15 +55,15 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       Data.IDimensions dim = layerBellow.GetDimensions();
 
       if (
-          (pos.x + src.Radius < 0 && src.Velocity.x < 0) ||
-          (pos.x - src.Radius > dim.Width && src.Velocity.x > 0))
+          (pos.x - src.Radius < 0 && src.Velocity.x < 0) ||
+          (pos.x + src.Radius > dim.Width && src.Velocity.x > 0))
       {
         InvokeWallCollision(src, isHorizontal: true);
         return;
       }
       if (
-        (pos.y + src.Radius < 0 && src.Velocity.y < 0) ||
-        (pos.y - src.Radius > dim.Height && src.Velocity.y > 0))
+        (pos.y - src.Radius < 0 && src.Velocity.y < 0) ||
+        (pos.y + src.Radius > dim.Height && src.Velocity.y > 0))
       {
         InvokeWallCollision(src, isHorizontal: false);
         return;
