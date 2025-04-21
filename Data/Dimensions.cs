@@ -3,7 +3,7 @@ namespace TP.ConcurrentProgramming.Data
   internal record Dimensions : IDimensions
   {
 
-    public Dimensions(Double Radius, double Height, double Width)
+    public Dimensions(double Radius, double Height, double Width)
     {
       this.Radius = Radius;
       this.Height = Height;

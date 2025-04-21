@@ -9,7 +9,6 @@
 //_____________________________________________________________________________________________________________________________________
 
 using System.Diagnostics;
-using TP.ConcurrentProgramming.Data;
 using UnderneathLayerAPI = TP.ConcurrentProgramming.Data.DataAbstractAPI;
 
 namespace TP.ConcurrentProgramming.BusinessLogic

@@ -76,10 +76,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
         throw new NotImplementedException();
       }
 
-      public override Dimensions GetDimensions()
-      {
-        throw new NotImplementedException();
-      }
 
       public override IVector CreateVector(double x, double y)
       {
@@ -87,6 +83,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       }
 
       public override List<Data.IBall> GetBalls()
+      {
+        throw new NotImplementedException();
+      }
+
+      public override IDimensions GetDimensions()
       {
         throw new NotImplementedException();
       }
@@ -110,10 +111,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       {
         throw new NotImplementedException();
       }
-      public override Dimensions GetDimensions()
-      {
-        throw new NotImplementedException();
-      }
 
       public override IVector CreateVector(double x, double y)
       {
@@ -121,6 +118,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       }
 
       public override List<Data.IBall> GetBalls()
+      {
+        throw new NotImplementedException();
+      }
+      public override IDimensions GetDimensions()
       {
         throw new NotImplementedException();
       }
@@ -145,10 +146,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       {
         throw new NotImplementedException();
       }
-      public override Dimensions GetDimensions()
-      {
-        throw new NotImplementedException();
-      }
 
       public override IVector CreateVector(double x, double y)
       {
@@ -156,6 +153,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       }
 
       public override List<Data.IBall> GetBalls()
+      {
+        throw new NotImplementedException();
+      }
+
+      public override IDimensions GetDimensions()
       {
         throw new NotImplementedException();
       }
