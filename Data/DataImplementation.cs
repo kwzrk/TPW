@@ -11,7 +11,7 @@ namespace TP.ConcurrentProgramming.Data
     private Random RandomGenerator = new();
     private List<Ball> BallsList = [];
 
-    public readonly Dimensions _dimensions = new Dimensions(20, 600, 100);
+    public readonly Dimensions _dimensions = new Dimensions(20, 400, 200);
 
     public DataImplementation()
     {
@@ -38,8 +38,8 @@ namespace TP.ConcurrentProgramming.Data
         );
 
         Vector initialVelocity = new(
-          RandomGenerator.NextDouble() - 0.5 * 10,
-          RandomGenerator.NextDouble() - 0.5 * 10
+            1,
+            1
         );
 
         double radius = 20;
