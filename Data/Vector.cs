@@ -40,5 +40,10 @@ namespace TP.ConcurrentProgramming.Data
     {
       return new Vector(this.x + delta.x, this.y + delta.y);
     }
+
+    static public Vector zero()
+    {
+      return new Vector(0, 0);
+    }
   }
 }

@@ -9,6 +9,7 @@
 //_____________________________________________________________________________________________________________________________________
 
 using System.Diagnostics;
+using TP.ConcurrentProgramming.Data;
 using UnderneathLayerAPI = TP.ConcurrentProgramming.Data.DataAbstractAPI;
 
 namespace TP.ConcurrentProgramming.BusinessLogic
@@ -40,42 +41,42 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         numberOfBalls,
         (startingPosition, databall) =>
         {
-          // databall.NewPositionNotification += CheckCollision;
+          databall.NewPositionNotification += CheckCollision;
           var ball = new Ball(databall);
           upperLayerHandler(new Position(startingPosition.x, startingPosition.y), new Ball(databall));
         }
       );
     }
 
-    // private void CheckCollision(object? s, IVector pos)
-    // {
-    //   if (s == null) return;
-    //   Data.IBall src = (Data.IBall)s;
-    //   Data.IDimensions dim = layerBellow.GetDimensions();
-    //
-    //   if (
-    //       (pos.x - src.Radius < 0 && src.Velocity.x < 0) ||
-    //       (pos.x + src.Radius > dim.Width && src.Velocity.x > 0))
-    //   {
-    //     InvokeWallCollision(src, isHorizontal: true);
-    //     return;
-    //   }
-    //   if (
-    //     (pos.y - src.Radius < 0 &&
-    //       src.Velocity.y < 0) ||
-    //     (pos.y + src.Radius > dim.Height &&
-    //       src.Velocity.y > 0))
-    //   {
-    //     InvokeWallCollision(src, isHorizontal: false);
-    //     return;
-    //   }
-    //
-    //   foreach (Data.IBall otherBall in layerBellow.GetBalls())
-    //   {
-    //     if (src.Equals(otherBall)) continue;
-    //     if (src.IsColliding(otherBall)) InvokeBallCollision(src, otherBall);
-    //   }
-    // }
+    private void CheckCollision(object? s, IVector pos)
+    {
+      if (s == null) return;
+      Data.IBall src = (Data.IBall)s;
+      Data.IDimensions dim = layerBellow.GetDimensions();
+
+      if (
+          (pos.x - src.Radius < 0 && src.Velocity.x < 0) ||
+          (pos.x + src.Radius > dim.Width && src.Velocity.x > 0))
+      {
+        InvokeWallCollision(src, isHorizontal: true);
+        return;
+      }
+      if (
+        (pos.y - src.Radius < 0 &&
+          src.Velocity.y < 0) ||
+        (pos.y + src.Radius > dim.Height &&
+          src.Velocity.y > 0))
+      {
+        InvokeWallCollision(src, isHorizontal: false);
+        return;
+      }
+
+      // foreach (Data.IBall otherBall in layerBellow.GetBalls())
+      // {
+      //   if (src.Equals(otherBall)) continue;
+      //   if (src.IsColliding(otherBall)) InvokeBallCollision(src, otherBall);
+      // }
+    }
 
     public override void SpawnBall(Action<IPosition, IBall> upperLayerHandler)
     {
@@ -100,17 +101,20 @@ namespace TP.ConcurrentProgramming.BusinessLogic
     //   }
     // }
     //
-    // private void InvokeWallCollision(Data.IBall ball, bool isHorizontal)
-    // {
-    //   if (isHorizontal)
-    //   {
-    //     ball.Velocity = layerBellow.CreateVector(-ball.Velocity.x, ball.Velocity.y);
-    //   }
-    //   else
-    //   {
-    //     ball.Velocity = layerBellow.CreateVector(ball.Velocity.x, -ball.Velocity.y);
-    //   }
-    // }
+    private void InvokeWallCollision(Data.IBall ball, bool isHorizontal)
+    {
+      if (isHorizontal)
+      {
+        // ball.Velocity = layerBellow.CreateVector(-ball.Velocity.x, ball.Velocity.y);
+        // ball.Velocity = 0;
+        ball.Velocity = layerBellow.CreateVector(0, 0);
+      }
+      else
+      {
+        ball.Velocity = layerBellow.CreateVector(0, 0);
+        // ball.Velocity = layerBellow.CreateVector(ball.Velocity.x, -ball.Velocity.y);
+      }
+    }
 
 
     public override IEnumerable<IBall> GetBallsList()
