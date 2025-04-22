@@ -86,11 +86,11 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
         Assert.IsNotNull(upperLayerHandler);
       }
 
-            public override IDimensions GetDimensions()
-            {
-                throw new NotImplementedException();
-            }
-        }
+      public override IBusinessDimensions GetDimensions()
+      {
+        throw new NotImplementedException();
+      }
+    }
 
   }
 }

@@ -8,8 +8,6 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
-using TP.ConcurrentProgramming.Data;
-
 namespace TP.ConcurrentProgramming.BusinessLogic
 {
   public abstract class BusinessLogicAbstractAPI : IDisposable
@@ -27,7 +25,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
     public abstract IEnumerable<IBall> GetBallsList();
 
-    public abstract IDimensions GetDimensions();
+    public abstract IBusinessDimensions GetDimensions();
   }
 
   public interface IPosition
@@ -38,5 +36,12 @@ namespace TP.ConcurrentProgramming.BusinessLogic
   public interface IBall
   {
     event EventHandler<IPosition> NewPositionNotification;
+  }
+
+  public interface IBusinessDimensions
+  {
+    double Width { get; init; }
+    double Height { get; init; }
+    double Diameter { get; init; }
   }
 }
