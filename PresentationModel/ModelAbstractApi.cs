@@ -13,24 +13,33 @@ using TP.ConcurrentProgramming.Data;
 
 namespace TP.ConcurrentProgramming.Presentation.Model
 {
-  public interface IBall : INotifyPropertyChanged
-  {
-    double Top { get; }
-    double Left { get; }
-    double Diameter { get; }
-  }
-
-  public abstract class ModelAbstractApi : IObservable<IBall>, IDisposable
-  {
-    private static Lazy<ModelAbstractApi> modelInstance = new Lazy<ModelAbstractApi>(() => new ModelImplementation());
-
-    public static ModelAbstractApi CreateModel()
+    public interface IBall : INotifyPropertyChanged
     {
-      return modelInstance.Value;
+        double Top { get; }
+        double Left { get; }
+        double Diameter { get; }
     }
-    public abstract void Start(int numberOfBalls);
-    public abstract IDisposable Subscribe(IObserver<IBall> observer);
-    public abstract void Dispose();
-    public abstract IDimensions GetDimensions();
-  }
+
+    public abstract class ModelAbstractApi : IObservable<IBall>, IDisposable
+    {
+        private static Lazy<ModelAbstractApi> modelInstance = new Lazy<ModelAbstractApi>(() => new ModelImplementation());
+
+        public static ModelAbstractApi CreateModel()
+        {
+            return modelInstance.Value;
+        }
+        public abstract void Start(int numberOfBalls);
+        public abstract IDisposable Subscribe(IObserver<IBall> observer);
+        public abstract void Dispose();
+
+        public abstract void ChangingWindowSize(double width, double height);
+
+        public abstract double ScaleWidth { get; protected set; }
+
+        public abstract double ScaleHeight { get; protected set; }
+
+        public abstract double BoardWidth { get; }
+
+        public abstract double BoardHeight { get; }
+    }
 }

@@ -27,7 +27,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
     public abstract IEnumerable<IBall> GetBallsList();
 
-
     public abstract IDimensions GetDimensions();
   }
 

@@ -17,12 +17,30 @@ namespace TP.ConcurrentProgramming.PresentationView {
     /// </summary>
     public partial class MainWindow : Window {
         public MainWindow() {
-            Random random = new Random();
+            //Random random = new Random();
+            
             InitializeComponent();
             MainWindowViewModel viewModel = (MainWindowViewModel)DataContext;
-            double screenWidth = SystemParameters.PrimaryScreenWidth;
-            double screenHeight = SystemParameters.PrimaryScreenHeight;
+            
+            //double screenWidth = SystemParameters.PrimaryScreenWidth;
+            //double screenHeight = SystemParameters.PrimaryScreenHeight;
+            //SizeChanged += OnWindowSizeChanged;
             //viewModel.Start(random.Next(5, 10));
+            
+            viewModel.WindowWidth = this.Width;
+            viewModel.WindowHeight = this.Height;
+            viewModel.TriggerWindowSizeChangedEvent(this.Width, this.Height);
+            this.SizeChanged += (s, e) =>
+            {
+                viewModel.WindowWidth = this.ActualWidth;
+                viewModel.WindowHeight = this.ActualHeight;
+            };
+
+            this.StateChanged += (s, e) =>
+            {
+                viewModel.WindowWidth = this.ActualWidth;
+                viewModel.WindowHeight = this.ActualHeight;
+            };
         }
 
         /// <summary>

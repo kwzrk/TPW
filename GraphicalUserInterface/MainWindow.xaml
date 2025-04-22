@@ -5,12 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:TP.ConcurrentProgramming.Presentation.ViewModel;assembly=TP.ConcurrentProgramming.PresentationViewModel"
         mc:Ignorable="d"
-        Title="Presentation layer targeting reactive behaviour" Height="auto" Width="auto">
+        Title="Presentation layer targeting reactive behaviour" Height="800" Width="600">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
-    <Viewbox Stretch="Uniform">
-        <StackPanel>
+    <StackPanel>
             <StackPanel Orientation="Vertical" Margin="10">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Liczba kul:" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -18,7 +17,7 @@
                 </StackPanel>
                 <Button Content="Rozpocznij" Command="{Binding StartCommand}" Width="100" Height="40" Margin="5"/>
             </StackPanel>
-            <Border BorderThickness="4" BorderBrush="Green" Height="{Binding Dimensions.Height}" Width="{Binding Dimensions.Width}">
+            <Border BorderThickness="4" BorderBrush="Green" Height="{Binding BorderHeight}" Width="{Binding BorderWidth}">
                 <ItemsControl ItemsSource="{Binding Balls}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -39,5 +38,4 @@
                 </ItemsControl>
             </Border>
         </StackPanel>
-    </Viewbox>
 </Window>

@@ -9,6 +9,7 @@
 //_____________________________________________________________________________________________________________________________________
 
 using TP.ConcurrentProgramming.BusinessLogic;
+using TP.ConcurrentProgramming.Data;
 
 namespace TP.ConcurrentProgramming.Presentation.Model.Test
 {
@@ -85,7 +86,11 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
         Assert.IsNotNull(upperLayerHandler);
       }
 
-    }
+            public override IDimensions GetDimensions()
+            {
+                throw new NotImplementedException();
+            }
+        }
 
   }
 }

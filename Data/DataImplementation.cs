@@ -19,7 +19,7 @@ namespace TP.ConcurrentProgramming.Data
         Move,
         null,
         TimeSpan.Zero,
-        TimeSpan.FromMilliseconds(50)
+        TimeSpan.FromMilliseconds(10)
       );
     }
 
@@ -38,11 +38,11 @@ namespace TP.ConcurrentProgramming.Data
         );
 
         Vector initialVelocity = new(
-            1,
-            1
+          RandomGenerator.Next(1, 6),
+          RandomGenerator.Next(1, 6)
         );
 
-        double radius = 20;
+        double radius = _dimensions.Radius;
 
         Ball newBall = new(startingPosition, initialVelocity, radius);
         upperLayerHandler(startingPosition, newBall);
