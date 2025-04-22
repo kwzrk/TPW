@@ -8,6 +8,8 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using TP.ConcurrentProgramming.Data;
+
 namespace TP.ConcurrentProgramming.BusinessLogic
 {
   public abstract class BusinessLogicAbstractAPI : IDisposable
@@ -24,6 +26,9 @@ namespace TP.ConcurrentProgramming.BusinessLogic
     public abstract void MoveBalls();
 
     public abstract IEnumerable<IBall> GetBallsList();
+
+
+    public abstract IDimensions GetDimensions();
   }
 
   public interface IPosition

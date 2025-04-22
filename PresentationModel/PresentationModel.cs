@@ -11,6 +11,7 @@ using System;
 using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
+using TP.ConcurrentProgramming.Data;
 using UnderneathLayerAPI = TP.ConcurrentProgramming.BusinessLogic.BusinessLogicAbstractAPI;
 
 namespace TP.ConcurrentProgramming.Presentation.Model
@@ -64,11 +65,16 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
     private void StartHandler(BusinessLogic.IPosition position, BusinessLogic.IBall ball)
     {
-      ModelBall newBall = new ModelBall(position.x, position.y, ball) { Diameter = 20.0 };
+      ModelBall newBall = new ModelBall(position.x, position.y, ball) { Diameter = GetDimensions().Radius };
       BallChanged.Invoke(this, new BallChangeEventArgs() { Ball = newBall });
     }
 
-    [Conditional("DEBUG")]
+    public override IDimensions GetDimensions()
+    {
+      return layerBellow.GetDimensions();
+    }
+
+        [Conditional("DEBUG")]
     internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)
     {
       returnInstanceDisposed(Disposed);

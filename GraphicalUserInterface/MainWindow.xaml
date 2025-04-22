@@ -18,7 +18,7 @@
                 </StackPanel>
                 <Button Content="Rozpocznij" Command="{Binding StartCommand}" Width="100" Height="40" Margin="5"/>
             </StackPanel>
-            <Border BorderThickness="4" BorderBrush="Green" Height="420" Width="400">
+            <Border BorderThickness="4" BorderBrush="Green" Height="{Binding Dimensions.Height}" Width="{Binding Dimensions.Width}">
                 <ItemsControl ItemsSource="{Binding Balls}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

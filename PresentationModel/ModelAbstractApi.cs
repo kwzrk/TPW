@@ -9,6 +9,7 @@
 
 using System;
 using System.ComponentModel;
+using TP.ConcurrentProgramming.Data;
 
 namespace TP.ConcurrentProgramming.Presentation.Model
 {
@@ -30,5 +31,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model
     public abstract void Start(int numberOfBalls);
     public abstract IDisposable Subscribe(IObserver<IBall> observer);
     public abstract void Dispose();
+    public abstract IDimensions GetDimensions();
   }
 }

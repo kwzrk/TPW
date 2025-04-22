@@ -113,6 +113,12 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       }
     }
 
+    public override IDimensions GetDimensions() 
+    {
+       ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
+       return layerBellow.GetDimensions();
+    }
+
 
     public override IEnumerable<IBall> GetBallsList()
     {

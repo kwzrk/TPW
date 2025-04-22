@@ -10,6 +10,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using TP.ConcurrentProgramming.Data;
 using TP.ConcurrentProgramming.Presentation.Model;
 using TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight;
 using ModelIBall = TP.ConcurrentProgramming.Presentation.Model.IBall;
@@ -25,7 +26,19 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
     {
       ModelLayer = modelLayerAPI ?? ModelAbstractApi.CreateModel();
       Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
+      Dimensions = ModelLayer.GetDimensions();
       StartCommand = new RelayCommand(StartSimulation);
+    }
+
+    private IDimensions _dimensions;
+    public IDimensions Dimensions
+    {
+       get => _dimensions;
+       set
+       {
+          _dimensions = value;
+          RaisePropertyChanged();
+       }
     }
 
     public void Start(int numberOfBalls)
