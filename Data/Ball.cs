@@ -38,10 +38,9 @@ namespace TP.ConcurrentProgramming.Data
     // {
     //   double dist = Math.Sqrt(Math.Pow(withOther.Position.x - Position.x, 2) +
     //                          Math.Pow(withOther.Position.y - Position.y, 2));
-    //   if (dist <= Radius) return true;
+    //   if (dist <= Radius + withOther.Radius) return true;
     //   return false;
     // }
-
 
     internal Ball(Vector initialPosition, Vector initialVelocity, double radius)
     {

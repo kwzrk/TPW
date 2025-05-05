@@ -11,46 +11,50 @@ using System;
 using System.Windows;
 using TP.ConcurrentProgramming.Presentation.ViewModel;
 
-namespace TP.ConcurrentProgramming.PresentationView {
-    /// <summary>
-    /// View implementation
-    /// </summary>
-    public partial class MainWindow : Window {
-        public MainWindow() {
-            //Random random = new Random();
-            
-            InitializeComponent();
-            MainWindowViewModel viewModel = (MainWindowViewModel)DataContext;
-            
-            //double screenWidth = SystemParameters.PrimaryScreenWidth;
-            //double screenHeight = SystemParameters.PrimaryScreenHeight;
-            //SizeChanged += OnWindowSizeChanged;
-            //viewModel.Start(random.Next(5, 10));
-            
-            viewModel.WindowWidth = this.Width;
-            viewModel.WindowHeight = this.Height;
-            viewModel.TriggerWindowSizeChangedEvent(this.Width, this.Height);
-            this.SizeChanged += (s, e) =>
-            {
-                viewModel.WindowWidth = this.ActualWidth;
-                viewModel.WindowHeight = this.ActualHeight;
-            };
+namespace TP.ConcurrentProgramming.PresentationView
+{
+  /// <summary>
+  /// View implementation
+  /// </summary>
+  public partial class MainWindow : Window
+  {
+    public MainWindow()
+    {
+      //Random random = new Random();
 
-            this.StateChanged += (s, e) =>
-            {
-                viewModel.WindowWidth = this.ActualWidth;
-                viewModel.WindowHeight = this.ActualHeight;
-            };
-        }
+      InitializeComponent();
+      MainWindowViewModel viewModel = (MainWindowViewModel)DataContext;
 
-        /// <summary>
-        /// Raises the <seealso cref="System.Windows.Window.Closed"/> event.
-        /// </summary>
-        /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        protected override void OnClosed(EventArgs e) {
-            if (DataContext is MainWindowViewModel viewModel)
-                viewModel.Dispose();
-            base.OnClosed(e);
-        }
+      //double screenWidth = SystemParameters.PrimaryScreenWidth;
+      //double screenHeight = SystemParameters.PrimaryScreenHeight;
+      //SizeChanged += OnWindowSizeChanged;
+      //viewModel.Start(random.Next(5, 10));
+
+      viewModel.WindowWidth = this.Width;
+      viewModel.WindowHeight = this.Height;
+      viewModel.TriggerWindowSizeChangedEvent(this.Width, this.Height);
+      this.SizeChanged += (s, e) =>
+      {
+        viewModel.WindowWidth = this.ActualWidth;
+        viewModel.WindowHeight = this.ActualHeight;
+      };
+
+      this.StateChanged += (s, e) =>
+      {
+        viewModel.WindowWidth = this.ActualWidth;
+        viewModel.WindowHeight = this.ActualHeight;
+      };
     }
+
+    /// <summary>
+    /// Raises the <seealso cref="System.Windows.Window.Closed"/> event.
+    /// </summary>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    protected override void OnClosed(EventArgs e)
+    {
+      if (DataContext is MainWindowViewModel viewModel)
+        viewModel.Dispose();
+      base.OnClosed(e);
+    }
+  }
 }

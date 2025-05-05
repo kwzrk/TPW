@@ -69,11 +69,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         return;
       }
 
-      // foreach (Data.IBall otherBall in layerBellow.GetBalls())
-      // {
-      //   if (src.Equals(otherBall)) continue;
-      //   if (src.IsColliding(otherBall)) InvokeBallCollision(src, otherBall);
-      // }
+      foreach (Data.IBall otherBall in layerBellow.GetBalls())
+      {
+        if (src.Equals(otherBall)) continue;
+        if (IsColliding(src, otherBall)) InvokeBallCollision(src, otherBall);
+      }
     }
 
     public override void SpawnBall(Action<IPosition, IBall> upperLayerHandler)
@@ -86,30 +86,39 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       );
     }
 
-    // private void InvokeBallCollision(Data.IBall ball, Data.IBall otherBall)
-    // {
-    //   double futureDistance = Math.Sqrt(Math.Pow(
-    //     (ball.Position.x + ball.Velocity.x) - (otherBall.Position.x + otherBall.Velocity.x), 2) +
-    //            Math.Pow((ball.Position.y + ball.Velocity.y) - (otherBall.Position.y + otherBall.Velocity.y), 2));
-    //   if (futureDistance <= ball.Radius)
-    //   {
-    //     Data.IVector temp = ball.Velocity;
-    //     ball.Velocity = otherBall.Velocity;
-    //     otherBall.Velocity = temp;
-    //   }
-    // }
-    //
+    private bool IsColliding(Data.IBall first, Data.IBall second)
+    {
+      double dist = Math.Sqrt(Math.Pow(second.Position.x - first.Position.x, 2) +
+                             Math.Pow(second.Position.y - first.Position.y, 2));
+      if (dist <= first.Radius + second.Radius) return true;
+      return false;
+    }
+
+
+    private void InvokeBallCollision(Data.IBall ball, Data.IBall otherBall)
+    {
+      double futureDistance = Math.Sqrt(Math.Pow(
+        (ball.Position.x + ball.Velocity.x) - (otherBall.Position.x + otherBall.Velocity.x), 2) +
+               Math.Pow((ball.Position.y + ball.Velocity.y) - (otherBall.Position.y + otherBall.Velocity.y), 2));
+      if (futureDistance <= ball.Radius)
+      {
+        Data.IVector temp = ball.Velocity;
+        ball.Velocity = otherBall.Velocity;
+        otherBall.Velocity = temp;
+      }
+    }
+
     private void InvokeWallCollision(Data.IBall ball, bool isHorizontal)
     {
       if (isHorizontal)
       {
-        // ball.Velocity = layerBellow.CreateVector(-ball.Velocity.x, ball.Velocity.y);
-        ball.Velocity = layerBellow.CreateVector(0, 0);
+        ball.Velocity = layerBellow.CreateVector(-ball.Velocity.x, ball.Velocity.y);
+        // ball.Velocity = layerBellow.CreateVector(0, 0);
       }
       else
       {
-        ball.Velocity = layerBellow.CreateVector(0, 0);
-        // ball.Velocity = layerBellow.CreateVector(ball.Velocity.x, -ball.Velocity.y);
+        ball.Velocity = layerBellow.CreateVector(ball.Velocity.x, -ball.Velocity.y);
+        // ball.Velocity = layerBellow.CreateVector(0, 0);
       }
     }
 

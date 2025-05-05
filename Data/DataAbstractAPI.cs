@@ -25,6 +25,7 @@ namespace TP.ConcurrentProgramming.Data
     public abstract IVector CreateVector(double x, double y);
     public abstract IDimensions GetDimensions();
     public abstract List<IBall> GetBalls();
+    public abstract bool IsColliding(IBall first, IBall second);
   }
 
   public interface IDimensions
@@ -36,10 +37,7 @@ namespace TP.ConcurrentProgramming.Data
 
   public interface IVector
   {
-    /// The X component of the vector.
     double x { get; init; }
-
-    /// The Y component of the vector.
     double y { get; init; }
   }
 
