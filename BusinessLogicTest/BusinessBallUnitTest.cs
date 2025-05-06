@@ -64,7 +64,22 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
       public double x { get; init; }
       public double y { get; init; }
-    }
+
+            public float Dot(Data.IVector vec)
+            {
+                throw new NotImplementedException();
+            }
+
+            public float Length()
+            {
+                throw new NotImplementedException();
+            }
+
+            public Data.IVector Normalize()
+            {
+                throw new NotImplementedException();
+            }
+        }
 
   }
 }

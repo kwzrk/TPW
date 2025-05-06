@@ -62,8 +62,8 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
             internal int Started = 0;
             internal int Subscribed = 0;
 
-            public override double ScaleWidth { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
-            public override double ScaleHeight { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+            public override double ScaleWidth { get; protected set; } = 1.0;
+            public override double ScaleHeight { get; protected set; } = 1.0;
 
             public override double BoardWidth =>  500;
 
@@ -71,7 +71,8 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
 
             public override void ChangingWindowSize(double width, double height)
             {
-                throw new NotImplementedException();
+                ScaleWidth = width / BoardWidth;
+                ScaleHeight = height / BoardHeight;
             }
 
             public override void Dispose()
@@ -124,14 +125,15 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
 
             public override void ChangingWindowSize(double width, double height)
             {
-                throw new NotImplementedException();
+                ScaleWidth = width / BoardWidth;
+                ScaleHeight = height / BoardHeight;
             }
 
             public event EventHandler<BallChangeEventArgs> BallChanged;
             private IObservable<EventPattern<BallChangeEventArgs>>? eventObservable = null;
 
-            public override double ScaleWidth { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
-            public override double ScaleHeight { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+            public override double ScaleWidth { get; protected set; } = 1.0;
+            public override double ScaleHeight { get; protected set; } = 1.0;
 
             public override double BoardWidth => 420;
 
