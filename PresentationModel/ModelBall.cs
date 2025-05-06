@@ -44,7 +44,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
     public double Top
     {
-      get => (TopBackingField * ScaleHeight) - (Diameter/2);
+      get => (TopBackingField * ScaleHeight);
 
       private set
       {
@@ -56,7 +56,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model
     }
     public double Left
     {
-      get => (LeftBackingField * ScaleWidth) - (Diameter/2);
+      get => (LeftBackingField * ScaleWidth);
 
       private set
       {
