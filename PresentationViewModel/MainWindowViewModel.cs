@@ -22,13 +22,20 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
 
         public MainWindowViewModel() : this(null) { }
 
+        private const double InitialWindowWidth = 600;
+        private const double InitialWindowHeight = 800;
+        private double _windowScale = 1.0;
+
         internal MainWindowViewModel(ModelAbstractApi modelLayerAPI)
         {
             ModelLayer = modelLayerAPI ?? ModelAbstractApi.CreateModel();
             Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
-            //Dimensions = ModelLayer.GetDimensions();
             WindowSizeChangedEvent += ModelLayer.ChangingWindowSize;
             StartCommand = new RelayCommand(StartSimulation);
+            IncreaseSizeCommand = new RelayCommand(IncreaseSize);
+            DecreaseSizeCommand = new RelayCommand(DecreaseSize);
+            WindowWidth = InitialWindowWidth;
+            WindowHeight = InitialWindowHeight;
         }
 
         private double _windowWidth;
@@ -61,6 +68,19 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
 
         private void NotifyWindowSizeChanged()
         {
+            if (WindowWidth < BorderWidth + 100)
+            {
+                _windowWidth = BorderWidth + 100;
+            }
+
+            if (WindowHeight < BorderHeight + 100)
+            {
+                _windowHeight = BorderHeight + 100;
+            }
+            
+            RaisePropertyChanged(nameof(WindowWidth));
+            RaisePropertyChanged(nameof(WindowHeight));
+            
             RaisePropertyChanged(nameof(BorderWidth));
             RaisePropertyChanged(nameof(BorderHeight));
             WindowSizeChangedEvent?.Invoke(WindowWidth, WindowHeight);
@@ -132,6 +152,8 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
             }
         }
         public ICommand StartCommand { get; }
+        public ICommand IncreaseSizeCommand { get; }
+        public ICommand DecreaseSizeCommand { get; }
         private void StartSimulation()
         {
             if (Disposed)
@@ -139,6 +161,27 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
             if (NumberOfBalls < 1)
                 throw new ArgumentOutOfRangeException(nameof(NumberOfBalls), "Number of balls must be greater than 0");
             ModelLayer.Start(NumberOfBalls);
+        }
+        private void IncreaseSize()
+        {
+            if (_windowScale * 1.1 <= 2.0)
+            {
+                _windowScale *= 1.1;
+                WindowWidth = InitialWindowWidth * _windowScale;
+                WindowHeight = InitialWindowHeight * _windowScale;
+                NotifyWindowSizeChanged();
+            }
+        }
+
+        private void DecreaseSize()
+        {
+            if (_windowScale * 0.9 >= 0.5)
+            {
+                _windowScale *= 0.9;
+                WindowWidth = InitialWindowWidth * _windowScale;
+                WindowHeight = InitialWindowHeight * _windowScale;
+                NotifyWindowSizeChanged();
+            }
         }
     }
 }

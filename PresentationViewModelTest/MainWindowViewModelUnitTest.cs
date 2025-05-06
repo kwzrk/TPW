@@ -65,9 +65,9 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
             public override double ScaleWidth { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
             public override double ScaleHeight { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
-            public override double BoardWidth => throw new NotImplementedException();
+            public override double BoardWidth =>  500;
 
-            public override double BoardHeight => throw new NotImplementedException();
+            public override double BoardHeight => 300;
 
             public override void ChangingWindowSize(double width, double height)
             {
@@ -133,9 +133,9 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
             public override double ScaleWidth { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
             public override double ScaleHeight { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
-            public override double BoardWidth => throw new NotImplementedException();
+            public override double BoardWidth => 420;
 
-            public override double BoardHeight => throw new NotImplementedException();
+            public override double BoardHeight => 400;
 
             private class ModelBall : ModelIBall
             {
