@@ -11,7 +11,7 @@ namespace TP.ConcurrentProgramming.Data
     private Random RandomGenerator = new();
     private List<Ball> BallsList = [];
 
-    public readonly Dimensions _dimensions = new Dimensions(40, 400, 420);
+    public readonly Dimensions _dimensions = new Dimensions(20, 400, 420);
 
     public DataImplementation()
     {

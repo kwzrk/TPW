@@ -44,49 +44,47 @@ namespace TP.ConcurrentProgramming.BusinessLogic
           databall.NewPositionNotification += async (s, pos) =>
           {
             await CheckBallCollision(s, pos);
-            CheckWallCollision(s, pos);
+            await CheckWallCollision(s, pos);
           };
           var ball = new Ball(databall);
-            Debug.WriteLine($"Initial position: ({startingPosition.x}, {startingPosition.y})");
-            upperLayerHandler(new Position(startingPosition.x, startingPosition.y), new Ball(databall));
+          upperLayerHandler(new Position(startingPosition.x, startingPosition.y), new Ball(databall));
         }
       );
     }
 
-    private void CheckWallCollision(object? s, IVector pos)
+    private async Task CheckWallCollision(object? s, IVector pos)
     {
-      if (s == null) return;
-      Data.IBall src = (Data.IBall)s;
-      Data.IDimensions dim = layerBellow.GetDimensions();
-
-      //Debug.WriteLine($"Ball at ({pos.x},{pos.y}) with velocity ({src.Velocity.x},{src.Velocity.y})");
-      //Debug.WriteLine($"Boundaries: Left={src.Radius}, Right={dim.Width-src.Radius}, Top={src.Radius}, Bottom={dim.Height-src.Radius}");
-
-      if (
-          (pos.x - src.Radius <= 0 && src.Velocity.x <= 0) ||
-          (pos.x + src.Radius >= dim.Width && src.Velocity.x >= 0))
+      await Task.Run(() =>
       {
-        InvokeWallCollision(src, isHorizontal: true);
-        return;
-      }
-      if (
-        (pos.y - src.Radius <= 0 && src.Velocity.y <= 0) ||
-        (pos.y + src.Radius >= dim.Height && src.Velocity.y >= 0))
-      {
-        InvokeWallCollision(src, isHorizontal: false);
-        return;
-      }
+        if (s == null) return;
+        Data.IBall src = (Data.IBall)s;
+        Data.IDimensions dim = layerBellow.GetDimensions();
 
+        if (
+            (src.Position.x <= 0 && src.Velocity.x <= 0) ||
+            (src.Position.x + src.Radius >= dim.Width && src.Velocity.x >= 0))
+        {
+          InvokeWallCollision(src, isHorizontal: true);
+          return;
+        }
+        if (
+            (src.Position.y <= 0 && src.Velocity.y <= 0) ||
+            (src.Position.y + src.Radius >= dim.Height && src.Velocity.y >= 0))
+        {
+          InvokeWallCollision(src, isHorizontal: false);
+          return;
+        }
+      });
     }
 
     private async Task CheckBallCollision(object? s, IVector pos)
     {
-      if (s == null) return;
-      Data.IBall src = (Data.IBall)s;
-      Data.IDimensions dim = layerBellow.GetDimensions();
-
       await Task.Run(() =>
        {
+         if (s == null) return;
+         Data.IBall src = (Data.IBall)s;
+         Data.IDimensions dim = layerBellow.GetDimensions();
+
          foreach (Data.IBall otherBall in layerBellow.GetBalls())
          {
            if (src.Equals(otherBall)) continue;
