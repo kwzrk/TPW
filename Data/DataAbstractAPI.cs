@@ -25,7 +25,7 @@ namespace TP.ConcurrentProgramming.Data
     public abstract IVector CreateVector(double x, double y);
     public abstract IDimensions GetDimensions();
     public abstract List<IBall> GetBalls();
-    public abstract bool IsColliding(IBall first, IBall second);
+
   }
 
   public interface IDimensions

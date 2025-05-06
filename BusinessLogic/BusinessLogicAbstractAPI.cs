@@ -24,6 +24,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
     public abstract void MoveBalls();
     public abstract IEnumerable<IBall> GetBallsList();
     public abstract IBusinessDimensions GetDimensions();
+
   }
 
   public interface IPosition

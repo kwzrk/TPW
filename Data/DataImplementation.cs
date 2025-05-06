@@ -4,7 +4,7 @@ namespace TP.ConcurrentProgramming.Data
 {
   internal class DataImplementation : DataAbstractAPI
   {
-    //private bool disposedValue;
+    //private bool dis+posedValue;
     private readonly object _lock = new object();
     private bool Disposed = false;
     private readonly Timer MoveTimer;
