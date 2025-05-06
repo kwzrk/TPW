@@ -16,19 +16,25 @@ namespace TP.ConcurrentProgramming.PresentationView {
     /// View implementation
     /// </summary>
     public partial class MainWindow : Window {
-        public MainWindow() {
-            //Random random = new Random();
-            
+        public MainWindow() {            
             InitializeComponent();
             MainWindowViewModel viewModel = (MainWindowViewModel)DataContext;
-            
-            //double screenWidth = SystemParameters.PrimaryScreenWidth;
-            //double screenHeight = SystemParameters.PrimaryScreenHeight;
-            //SizeChanged += OnWindowSizeChanged;
-            //viewModel.Start(random.Next(5, 10));
-            
-            viewModel.WindowWidth = this.Width;
-            viewModel.WindowHeight = this.Height;
+
+            this.Width = viewModel.WindowWidth;
+            this.Height = viewModel.WindowHeight;
+
+            viewModel.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(MainWindowViewModel.WindowWidth))
+                {
+                    this.Width = viewModel.WindowWidth;
+                }
+                if (e.PropertyName == nameof(MainWindowViewModel.WindowHeight))
+                {
+                    this.Height = viewModel.WindowHeight;
+                }
+            };
+
             viewModel.TriggerWindowSizeChangedEvent(this.Width, this.Height);
             this.SizeChanged += (s, e) =>
             {

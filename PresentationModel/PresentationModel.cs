@@ -67,7 +67,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
         private void StartHandler(BusinessLogic.IPosition position, BusinessLogic.IBall ball)
         {
-            //ModelBall newBall = new ModelBall(position.x, position.y, ball) { Diameter = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Radius };
             ModelBall newBall = new ModelBall(position.x, position.y, ball);
             Scale += newBall.NewScaleNotification;
             BallChanged.Invoke(this, new BallChangeEventArgs() { Ball = newBall });
@@ -86,12 +85,12 @@ namespace TP.ConcurrentProgramming.Presentation.Model
             else if (height < width)
             {
                 ScaleHeight = (height - 150) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Height;
-                ScaleWidth = ScaleHeight; // Maintain aspect ratio
+                ScaleWidth = ScaleHeight;
             }
             else
             {
                 ScaleWidth = (width - 150) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Width;
-                ScaleHeight = ScaleWidth; // Maintain aspect ratio
+                ScaleHeight = ScaleWidth;
             }
                 Scale?.Invoke(ScaleWidth, ScaleHeight);
         }
@@ -100,6 +99,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model
         public override double ScaleHeight { get; protected set; } = 1.0;
         public override double BoardHeight => ScaleHeight * UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Height;
         public override double BoardWidth => ScaleWidth * UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Width;
+        
         public event Action<double, double> Scale;
 
 
