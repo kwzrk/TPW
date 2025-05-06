@@ -30,10 +30,16 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
         {
             ModelLayer = modelLayerAPI ?? ModelAbstractApi.CreateModel();
             Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
+
+            // Subscribe to the window size changed event
             WindowSizeChangedEvent += ModelLayer.ChangingWindowSize;
+            
+            // ICommand Section 
             StartCommand = new RelayCommand(StartSimulation);
             IncreaseSizeCommand = new RelayCommand(IncreaseSize);
             DecreaseSizeCommand = new RelayCommand(DecreaseSize);
+
+            // Set initial window size
             WindowWidth = InitialWindowWidth;
             WindowHeight = InitialWindowHeight;
         }
@@ -66,6 +72,9 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
             }
         }
 
+        /// <summary>
+        /// Notifies the window size changed event and updates the window size properties.
+        /// </summary>
         private void NotifyWindowSizeChanged()
         {
             if (WindowWidth < BorderWidth + 100)
@@ -138,9 +147,6 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
         private ModelAbstractApi ModelLayer;
         private bool Disposed = false;
 
-        /// <summary>
-        /// Adding number of balls 
-        /// </summary>
         private int _numberOfBalls;
         public int NumberOfBalls
         {

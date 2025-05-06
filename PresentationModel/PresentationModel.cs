@@ -74,6 +74,8 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
         public override void ChangingWindowSize(double width, double height)
         {
+            var dim = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions();
+            Debug.WriteLine($"Board Dimensions - Raw: W={dim.Width}, H={dim.Height} | Scaled: W={BoardWidth}, H={BoardHeight}");
             double minWidth = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Width;
             double minHeight = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Height;
 
@@ -84,15 +86,15 @@ namespace TP.ConcurrentProgramming.Presentation.Model
             }
             else if (height < width)
             {
-                ScaleHeight = (height - 150) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Height;
+                ScaleHeight = (height - 200) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Height;
                 ScaleWidth = ScaleHeight;
             }
             else
             {
-                ScaleWidth = (width - 150) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Width;
+                ScaleWidth = (width - 200) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Width;
                 ScaleHeight = ScaleWidth;
             }
-                Scale?.Invoke(ScaleWidth, ScaleHeight);
+            Scale?.Invoke(ScaleWidth, ScaleHeight);
         }
 
         public override double ScaleWidth { get; protected set; } = 1.0;

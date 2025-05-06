@@ -9,6 +9,7 @@
 //  by introducing yourself and telling us what you do with this community.
 //_____________________________________________________________________________________________________________________________________
 
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -25,12 +26,13 @@ namespace TP.ConcurrentProgramming.Presentation.Model
       TopBackingField = top;
       LeftBackingField = left;
       DiameterBackingField = LogicAPI.GetBusinessLogicLayer().GetDimensions().Diameter;
+      Debug.WriteLine($"ModelBall created at center: ({left}, {top})");
       underneathBall.NewPositionNotification += NewPositionNotification;
     }
 
     //public double Top => TopBackingField * ScaleHeight;
     //public double Left => LeftBackingField * ScaleWidth;
-    public double Diameter => DiameterBackingField * ScaleWidth;
+    public double Diameter => DiameterBackingField * Math.Min(ScaleWidth, ScaleHeight);
 
     private double TopBackingField;
     private double LeftBackingField;
@@ -42,33 +44,32 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
     public double Top
     {
-      get => TopBackingField * ScaleHeight;
+      get => (TopBackingField * ScaleHeight) - (Diameter/2);
 
       private set
       {
         if (TopBackingField == value)
           return;
         TopBackingField = value;
-        RaisePropertyChanged();
         RaisePropertyChanged(nameof(Top));
       }
     }
     public double Left
     {
-      get => LeftBackingField * ScaleWidth;
+      get => (LeftBackingField * ScaleWidth) - (Diameter/2);
 
       private set
       {
         if (LeftBackingField == value)
           return;
         LeftBackingField = value;
-        RaisePropertyChanged();
         RaisePropertyChanged(nameof(Left));
       }
     }
 
     private void NewPositionNotification(object sender, IPosition e)
     {
+      //Debug.WriteLine($"Raw Position: x={e.x}, y={e.y} | Scaled Position: x={e.x * ScaleWidth}, y={e.y * ScaleHeight}");
       TopBackingField = e.y;
       LeftBackingField = e.x;
       RaisePropertyChanged(nameof(Top));

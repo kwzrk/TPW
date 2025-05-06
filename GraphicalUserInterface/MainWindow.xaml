@@ -23,8 +23,8 @@
                 <Button Content="Decrease Size" Command="{Binding DecreaseSizeCommand}" Width="100" Margin="5" />
             </StackPanel>
         </StackPanel>
-            <Border BorderThickness="4" BorderBrush="Green" Height="{Binding BorderHeight}" Width="{Binding BorderWidth}">
-                <ItemsControl ItemsSource="{Binding Balls}">
+        <Border BorderThickness="4" BorderBrush="Green" Height="{Binding BorderHeight}" Width="{Binding BorderWidth}">
+            <ItemsControl ItemsSource="{Binding Balls}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas />
