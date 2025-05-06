@@ -41,14 +41,18 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         numberOfBalls,
         (startingPosition, databall) =>
         {
-          databall.NewPositionNotification += CheckCollision;
+          databall.NewPositionNotification += async (s, pos) =>
+          {
+            await CheckBallCollision(s, pos);
+            CheckWallCollision(s, pos);
+          };
           var ball = new Ball(databall);
           upperLayerHandler(new Position(startingPosition.x, startingPosition.y), new Ball(databall));
         }
       );
     }
 
-    private void CheckCollision(object? s, IVector pos)
+    private void CheckWallCollision(object? s, IVector pos)
     {
       if (s == null) return;
       Data.IBall src = (Data.IBall)s;
@@ -69,11 +73,22 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         return;
       }
 
-      foreach (Data.IBall otherBall in layerBellow.GetBalls())
-      {
-        if (src.Equals(otherBall)) continue;
-        if (IsColliding(src, otherBall)) InvokeBallCollision(src, otherBall);
-      }
+    }
+
+    private async Task CheckBallCollision(object? s, IVector pos)
+    {
+      if (s == null) return;
+      Data.IBall src = (Data.IBall)s;
+      Data.IDimensions dim = layerBellow.GetDimensions();
+
+      await Task.Run(() =>
+       {
+         foreach (Data.IBall otherBall in layerBellow.GetBalls())
+         {
+           if (src.Equals(otherBall)) continue;
+           if (IsColliding(src, otherBall)) InvokeBallCollision(src, otherBall);
+         }
+       });
     }
 
     public override void SpawnBall(Action<IPosition, IBall> upperLayerHandler)
@@ -97,15 +112,15 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
     private void InvokeBallCollision(Data.IBall ball, Data.IBall otherBall)
     {
-      double futureDistance = Math.Sqrt(Math.Pow(
+      double delta = Math.Sqrt(Math.Pow(
         (ball.Position.x + ball.Velocity.x) - (otherBall.Position.x + otherBall.Velocity.x), 2) +
                Math.Pow((ball.Position.y + ball.Velocity.y) - (otherBall.Position.y + otherBall.Velocity.y), 2));
-      if (futureDistance <= ball.Radius)
-      {
-        Data.IVector temp = ball.Velocity;
-        ball.Velocity = otherBall.Velocity;
-        otherBall.Velocity = temp;
-      }
+
+      if (delta > ball.Radius) return;
+
+      Data.IVector temp = ball.Velocity;
+      ball.Velocity = otherBall.Velocity;
+      otherBall.Velocity = temp;
     }
 
     private void InvokeWallCollision(Data.IBall ball, bool isHorizontal)
@@ -113,12 +128,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       if (isHorizontal)
       {
         ball.Velocity = layerBellow.CreateVector(-ball.Velocity.x, ball.Velocity.y);
-        // ball.Velocity = layerBellow.CreateVector(0, 0);
       }
       else
       {
         ball.Velocity = layerBellow.CreateVector(ball.Velocity.x, -ball.Velocity.y);
-        // ball.Velocity = layerBellow.CreateVector(0, 0);
       }
     }
 

@@ -11,7 +11,7 @@ namespace TP.ConcurrentProgramming.Data
     private Random RandomGenerator = new();
     private List<Ball> BallsList = [];
 
-    public readonly Dimensions _dimensions = new Dimensions(20, 400, 420);
+    public readonly Dimensions _dimensions = new Dimensions(40, 400, 420);
 
     public DataImplementation()
     {
@@ -65,7 +65,7 @@ namespace TP.ConcurrentProgramming.Data
         RandomGenerator.NextDouble() - 0.5 * 10
       );
 
-      double radius = 20;
+      double radius = 50;
 
       Ball newBall = new(startingPosition, initialVelocity, radius);
       upperLayerHandler(startingPosition, newBall);
@@ -102,14 +102,16 @@ namespace TP.ConcurrentProgramming.Data
 
     private void Move(object? x)
     {
-      //BallsList.ForEach(x => x.Move());
-      foreach (var ball in BallsList)
-      {
-        ball.Move();
-      }
+      BallsList.ForEach(x => x.Move());
     }
 
-    public override List<IBall> GetBalls() => BallsList.Select(ball => (IBall)ball).ToList();
+    public override List<IBall> GetBalls()
+    {
+      lock (_lock)
+      {
+        return BallsList.Select(ball => (IBall)ball).ToList();
+      }
+    }
     public override IDimensions GetDimensions() => _dimensions;
 
     [Conditional("DEBUG")]

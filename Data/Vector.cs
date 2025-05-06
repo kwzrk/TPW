@@ -36,9 +36,26 @@ namespace TP.ConcurrentProgramming.Data
       y = YComponent;
     }
 
-    public Vector add(Vector delta)
+    public Vector add(IVector delta)
     {
       return new Vector(this.x + delta.x, this.y + delta.y);
+    }
+
+    public IVector Normalize()
+    {
+      double length = Math.Sqrt(x * x + y * y);
+      if (length == 0.0) Vector.zero();
+      return new Vector(x / length, y / length);
+    }
+
+    public float Length()
+    {
+      return (float)Math.Sqrt(x * x + y * y);
+    }
+
+    public float Dot(IVector vector)
+    {
+      return (float)(this.x * vector.x + this.y * vector.y);
     }
 
     static public Vector zero()

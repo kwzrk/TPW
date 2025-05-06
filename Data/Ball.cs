@@ -19,28 +19,14 @@ namespace TP.ConcurrentProgramming.Data
     public event EventHandler<IVector>? NewPositionNotification;
     public IVector Velocity
     {
-      get => _velocity;
-      set
-      {
-        lock (_lock) _velocity = (Vector)value;
-      }
+      get { lock (_lock) return _velocity; }
+      set { lock (_lock) _velocity = (Vector)value; }
     }
 
-    public IVector Position
-    {
-      get => _position;
-    }
+    public IVector Position { get { lock (_lock) return _position; } }
 
     public double Radius => _radius;
     private readonly double _radius;
-
-    // public bool IsColliding(IBall withOther)
-    // {
-    //   double dist = Math.Sqrt(Math.Pow(withOther.Position.x - Position.x, 2) +
-    //                          Math.Pow(withOther.Position.y - Position.y, 2));
-    //   if (dist <= Radius + withOther.Radius) return true;
-    //   return false;
-    // }
 
     internal Ball(Vector initialPosition, Vector initialVelocity, double radius)
     {
@@ -49,15 +35,21 @@ namespace TP.ConcurrentProgramming.Data
       _radius = radius;
     }
 
-    private void RaisePositionChangeNotification()
+    private Task RaisePositionChangeNotification()
     {
-      NewPositionNotification?.Invoke(this, _position);
+      if (NewPositionNotification == null)
+        return Task.CompletedTask;
+
+      return Task.Run(() =>
+      {
+        NewPositionNotification?.Invoke(this, _position);
+      });
     }
 
-    internal void Move()
+    internal async void Move()
     {
       _position = _position.add(_velocity);
-      RaisePositionChangeNotification();
+      await RaisePositionChangeNotification();
     }
   }
 }

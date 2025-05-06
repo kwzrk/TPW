@@ -35,5 +35,26 @@ namespace TP.ConcurrentProgramming.Data.Test
       Assert.AreEqual<int>(1, numberOfCallBackCalled);
       Assert.AreEqual<IVector>(initialPosition, curentPosition);
     }
+
+    [TestMethod]
+    public void BallVelocityAsync()
+    {
+      var ball = new Ball(new Vector(0, 0), new Vector(1, 1), 5);
+      var tasks = new List<Task>();
+
+      for (int i = 0; i < 1000; i++)
+      {
+        int j = i;
+        tasks.Add(Task.Run(() =>
+        {
+          ball.Velocity = new Vector(j, j);
+        }));
+      }
+
+      Task.WaitAll(tasks.ToArray());
+
+      var velocity = ball.Velocity;
+      Assert.IsTrue(velocity != null);
+    }
   }
 }
