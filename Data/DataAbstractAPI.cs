@@ -25,6 +25,7 @@ namespace TP.ConcurrentProgramming.Data
     public abstract IVector CreateVector(double x, double y);
     public abstract IDimensions GetDimensions();
     public abstract List<IBall> GetBalls();
+    public abstract void BeginMovement();
   }
 
   public interface IDimensions
@@ -49,5 +50,7 @@ namespace TP.ConcurrentProgramming.Data
     IVector Velocity { get; set; }
     IVector Position { get; }
     double Radius { get; }
+    public Task StartMovement();
+    public void StopMovement();
   }
 }

@@ -21,7 +21,7 @@ namespace TP.ConcurrentProgramming.Data.Test
     }
 
     [TestMethod]
-    public void MoveTestMethod()
+    public async void MoveTestMethod()
     {
       Vector initialPosition = new(10.0, 10.0);
       Ball newInstance = new(initialPosition, new Vector(0.0, 0.0), 20);
@@ -31,7 +31,8 @@ namespace TP.ConcurrentProgramming.Data.Test
         {
           Assert.IsNotNull(sender); curentPosition = position; numberOfCallBackCalled++;
         };
-      newInstance.Move();
+
+      await newInstance.Move();
       Assert.AreEqual<int>(1, numberOfCallBackCalled);
       Assert.AreEqual<IVector>(initialPosition, curentPosition);
     }

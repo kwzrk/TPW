@@ -4,24 +4,12 @@ namespace TP.ConcurrentProgramming.Data
 {
   internal class DataImplementation : DataAbstractAPI
   {
-    //private bool dis+posedValue;
     private readonly object _lock = new object();
     private bool Disposed = false;
-    private readonly Timer MoveTimer;
     private Random RandomGenerator = new();
     private List<Ball> BallsList = [];
 
     public readonly Dimensions _dimensions = new Dimensions(20, 400, 420);
-
-    public DataImplementation()
-    {
-      MoveTimer = new Timer(
-        Move,
-        null,
-        TimeSpan.Zero,
-        TimeSpan.FromMilliseconds(10)
-      );
-    }
 
     public override void Start(
       int numberOfBalls,
@@ -38,13 +26,15 @@ namespace TP.ConcurrentProgramming.Data
         );
 
         Vector initialVelocity = new(
-          RandomGenerator.Next(1, 6),
-          RandomGenerator.Next(1, 6)
+          (RandomGenerator.NextDouble() - 0.5) * 10,
+          (RandomGenerator.NextDouble() - 0.5) * 10
         );
+
+        int delay = 16;
 
         double radius = _dimensions.Radius;
 
-        Ball newBall = new(startingPosition, initialVelocity, radius);
+        Ball newBall = new(startingPosition, initialVelocity, radius, delay);
         upperLayerHandler(startingPosition, newBall);
         BallsList.Add(newBall);
       }
@@ -61,8 +51,8 @@ namespace TP.ConcurrentProgramming.Data
       );
 
       Vector initialVelocity = new(
-        RandomGenerator.NextDouble() - 0.5 * 10,
-        RandomGenerator.NextDouble() - 0.5 * 10
+        RandomGenerator.NextDouble() - 0.5 * 20,
+        RandomGenerator.NextDouble() - 0.5 * 20
       );
 
       double radius = 50;
@@ -78,7 +68,6 @@ namespace TP.ConcurrentProgramming.Data
 
       if (disposing)
       {
-        MoveTimer.Dispose();
         BallsList.Clear();
       }
 
@@ -100,9 +89,9 @@ namespace TP.ConcurrentProgramming.Data
       GC.SuppressFinalize(this);
     }
 
-    private void Move(object? x)
+    public override void BeginMovement()
     {
-      BallsList.ForEach(x => x.Move());
+      BallsList.ForEach(async item => await item.StartMovement());
     }
 
     public override List<IBall> GetBalls()
@@ -112,6 +101,7 @@ namespace TP.ConcurrentProgramming.Data
         return BallsList.Select(ball => (IBall)ball).ToList();
       }
     }
+
     public override IDimensions GetDimensions() => _dimensions;
 
     [Conditional("DEBUG")]

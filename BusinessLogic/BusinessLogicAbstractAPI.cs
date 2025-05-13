@@ -21,8 +21,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic
     public abstract void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler);
     public abstract void Dispose();
     public abstract void SpawnBall(Action<IPosition, IBall> upperLayerHandler);
-    public abstract void MoveBalls();
-    public abstract IEnumerable<IBall> GetBallsList();
     public abstract IBusinessDimensions GetDimensions();
 
   }

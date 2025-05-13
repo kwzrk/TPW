@@ -67,16 +67,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
         Disposed = true;
       }
 
-      public override IEnumerable<BusinessLogic.IBall> GetBallsList()
-      {
-        throw new NotImplementedException();
-      }
-
-      public override void MoveBalls()
-      {
-        throw new NotImplementedException();
-      }
-
       public override void Start(
         int numberOfBalls,
         Action<IPosition, BusinessLogic.IBall> upperLayerHandler

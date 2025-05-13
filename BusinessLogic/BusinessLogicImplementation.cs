@@ -41,56 +41,52 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         numberOfBalls,
         (startingPosition, databall) =>
         {
-          databall.NewPositionNotification += async (s, pos) =>
+          databall.NewPositionNotification += (s, pos) =>
           {
-            await CheckBallCollision(s, pos);
-            await CheckWallCollision(s, pos);
+            CheckBallCollision(s, pos);
+            CheckWallCollision(s, pos);
           };
           var ball = new Ball(databall);
           upperLayerHandler(new Position(startingPosition.x, startingPosition.y), new Ball(databall));
         }
       );
+
+      layerBellow.BeginMovement();
     }
 
-    private async Task CheckWallCollision(object? s, IVector pos)
+    private void CheckWallCollision(object? s, IVector pos)
     {
-      await Task.Run(() =>
+      if (s == null) return;
+      Data.IBall src = (Data.IBall)s;
+      Data.IDimensions dim = layerBellow.GetDimensions();
+
+      if (
+          (src.Position.x <= 0 && src.Velocity.x <= 0) ||
+          (src.Position.x + src.Radius >= dim.Width && src.Velocity.x >= 0))
       {
-        if (s == null) return;
-        Data.IBall src = (Data.IBall)s;
-        Data.IDimensions dim = layerBellow.GetDimensions();
-
-        if (
-            (src.Position.x <= 0 && src.Velocity.x <= 0) ||
-            (src.Position.x + src.Radius >= dim.Width && src.Velocity.x >= 0))
-        {
-          InvokeWallCollision(src, isHorizontal: true);
-          return;
-        }
-        if (
-            (src.Position.y <= 0 && src.Velocity.y <= 0) ||
-            (src.Position.y + src.Radius >= dim.Height && src.Velocity.y >= 0))
-        {
-          InvokeWallCollision(src, isHorizontal: false);
-          return;
-        }
-      });
+        InvokeWallCollision(src, isHorizontal: true);
+        return;
+      }
+      if (
+          (src.Position.y <= 0 && src.Velocity.y <= 0) ||
+          (src.Position.y + src.Radius >= dim.Height && src.Velocity.y >= 0))
+      {
+        InvokeWallCollision(src, isHorizontal: false);
+        return;
+      }
     }
 
-    private async Task CheckBallCollision(object? s, IVector pos)
+    private void CheckBallCollision(object? s, IVector pos)
     {
-      await Task.Run(() =>
-       {
-         if (s == null) return;
-         Data.IBall src = (Data.IBall)s;
-         Data.IDimensions dim = layerBellow.GetDimensions();
+      if (s == null) return;
+      Data.IBall src = (Data.IBall)s;
+      Data.IDimensions dim = layerBellow.GetDimensions();
 
-         foreach (Data.IBall otherBall in layerBellow.GetBalls())
-         {
-           if (src.Equals(otherBall)) continue;
-           if (IsColliding(src, otherBall)) InvokeBallCollision(src, otherBall);
-         }
-       });
+      foreach (Data.IBall otherBall in layerBellow.GetBalls())
+      {
+        if (src.Equals(otherBall)) continue;
+        if (IsColliding(src, otherBall)) InvokeBallCollision(src, otherBall);
+      }
     }
 
     public override void SpawnBall(Action<IPosition, IBall> upperLayerHandler)
@@ -142,18 +138,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
       return new BusinessDimensions(layerBellow.GetDimensions());
     }
-
-
-    public override IEnumerable<IBall> GetBallsList()
-    {
-      throw new NotImplementedException();
-    }
-
-    public override void MoveBalls()
-    {
-      throw new NotImplementedException();
-    }
-
 
     [Conditional("DEBUG")]
     internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)

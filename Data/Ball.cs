@@ -10,13 +10,18 @@
 
 namespace TP.ConcurrentProgramming.Data
 {
-  internal class Ball : IBall
+  internal class Ball : IBall, IDisposable
   {
     private readonly object _lock = new object();
     private Vector _position;
     private Vector _velocity;
+    private readonly int _delay = 16;
+    private CancellationTokenSource? _moveCancellation;
+    private Task? _moveTask;
 
     public event EventHandler<IVector>? NewPositionNotification;
+    public event EventHandler<IVector>? MovingEndedNotification;
+
     public IVector Velocity
     {
       get { lock (_lock) return _velocity; }
@@ -25,31 +30,57 @@ namespace TP.ConcurrentProgramming.Data
 
     public IVector Position { get { lock (_lock) return _position; } }
 
-    public double Radius => _radius;
     private readonly double _radius;
+    public double Radius => _radius;
 
-    internal Ball(Vector initialPosition, Vector initialVelocity, double radius)
+    internal Ball(Vector initialPosition, Vector initialVelocity, double radius, int delay = 16)
     {
       _position = initialPosition;
       _velocity = initialVelocity;
       _radius = radius;
+      _delay = delay;
     }
 
-    private Task RaisePositionChangeNotification()
+    public async Task StartMovement()
     {
-      if (NewPositionNotification == null)
-        return Task.CompletedTask;
+      await Task.Run(() =>
+       {
+         StopMovement();
+         _moveCancellation = new CancellationTokenSource();
+         _moveTask = MoveContinuouslyAsync(_moveCancellation.Token);
+       });
+    }
 
-      return Task.Run(() =>
+    public void StopMovement()
+    {
+      _moveCancellation?.Cancel();
+      _moveTask = null;
+    }
+
+    private async Task MoveContinuouslyAsync(CancellationToken ct)
+    {
+
+      while (!ct.IsCancellationRequested)
       {
+        lock (_lock) { _position = _position.add(_velocity); }
         NewPositionNotification?.Invoke(this, _position);
-      });
+
+        await Task.Delay(_delay, ct);
+      }
+
+      MovingEndedNotification?.Invoke(this, _position);
     }
 
-    internal async void Move()
+    public void Dispose() => StopMovement();
+
+    internal async Task Move()
     {
-      _position = _position.add(_velocity);
-      await RaisePositionChangeNotification();
+      await Task.Run(() =>
+       {
+         _position = _position.add(_velocity);
+         NewPositionNotification?.Invoke(this, _position);
+       }
+      );
     }
   }
 }

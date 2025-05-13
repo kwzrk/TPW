@@ -43,14 +43,25 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
       public event EventHandler<Data.IVector>? NewPositionNotification;
 
-      public bool IsColliding(Data.IBall ball2)
+      public Task Move()
+      {
+        NewPositionNotification?.Invoke(this, new VectorFixture(1, 1));
+        return Task.CompletedTask;
+      }
+
+      public Task StartMovement()
       {
         throw new NotImplementedException();
       }
 
-      internal void Move()
+      public void StopMovement()
       {
-        NewPositionNotification?.Invoke(this, new VectorFixture(0.0, 0.0));
+        throw new NotImplementedException();
+      }
+
+      public override string? ToString()
+      {
+        return base.ToString();
       }
     }
 
@@ -65,21 +76,21 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       public double x { get; init; }
       public double y { get; init; }
 
-            public float Dot(Data.IVector vec)
-            {
-                throw new NotImplementedException();
-            }
+      public float Dot(Data.IVector vec)
+      {
+        throw new NotImplementedException();
+      }
 
-            public float Length()
-            {
-                throw new NotImplementedException();
-            }
+      public float Length()
+      {
+        throw new NotImplementedException();
+      }
 
-            public Data.IVector Normalize()
-            {
-                throw new NotImplementedException();
-            }
-        }
+      public Data.IVector Normalize()
+      {
+        throw new NotImplementedException();
+      }
+    }
 
   }
 }

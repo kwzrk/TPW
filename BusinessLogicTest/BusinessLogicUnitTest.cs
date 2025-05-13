@@ -68,6 +68,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
         throw new NotImplementedException();
       }
 
+
       public override void Dispose()
       { }
 
@@ -90,6 +91,26 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       public override IDimensions GetDimensions()
       {
         throw new NotImplementedException();
+      }
+
+      public override bool Equals(object? obj)
+      {
+        return base.Equals(obj);
+      }
+
+      public override int GetHashCode()
+      {
+        return base.GetHashCode();
+      }
+
+      public override string? ToString()
+      {
+        return base.ToString();
+      }
+
+      public override void BeginMovement()
+      {
+        return;
       }
     }
 
@@ -125,6 +146,26 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       {
         throw new NotImplementedException();
       }
+
+      public override bool Equals(object? obj)
+      {
+        return base.Equals(obj);
+      }
+
+      public override int GetHashCode()
+      {
+        return base.GetHashCode();
+      }
+
+      public override string? ToString()
+      {
+        return base.ToString();
+      }
+
+      public override void BeginMovement()
+      {
+        throw new NotImplementedException();
+      }
     }
 
     private class DataLayerStartFixcure : Data.DataAbstractAPI
@@ -139,7 +180,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       {
         StartCalled = true;
         NumberOfBallseCreated = numberOfBalls;
-        upperLayerHandler(new DataVectorFixture(), new DataBallFixture());
+        upperLayerHandler(new DataVectorFixture(0, 0), new DataBallFixture());
       }
 
       public override void SpawnBall(Action<IVector, Data.IBall> upperLayerHandler)
@@ -162,26 +203,37 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
         throw new NotImplementedException();
       }
 
+      public override void BeginMovement()
+      {
+        return;
+      }
+
       private record DataVectorFixture : Data.IVector
       {
+        public DataVectorFixture(double x, double y)
+        {
+          this.x = x;
+          this.y = y;
+        }
+
         public double x { get; init; }
         public double y { get; init; }
 
-                public float Dot(IVector vec)
-                {
-                    throw new NotImplementedException();
-                }
+        public float Dot(IVector vec)
+        {
+          throw new NotImplementedException();
+        }
 
-                public float Length()
-                {
-                    throw new NotImplementedException();
-                }
+        public float Length()
+        {
+          throw new NotImplementedException();
+        }
 
-                public IVector Normalize()
-                {
-                    throw new NotImplementedException();
-                }
-            }
+        public IVector Normalize()
+        {
+          throw new NotImplementedException();
+        }
+      }
 
       private class DataBallFixture : Data.IBall
       {
@@ -192,12 +244,22 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
         public event EventHandler<IVector>? NewPositionNotification = null;
 
-        public bool IsColliding(Data.IBall ball2)
+        public Task Move()
+        {
+          NewPositionNotification?.Invoke(this, new DataVectorFixture(0.0, 0.0));
+          return Task.CompletedTask;
+        }
+
+        public Task StartMovement()
+        {
+          throw new NotImplementedException();
+        }
+
+        public void StopMovement()
         {
           throw new NotImplementedException();
         }
       }
     }
-
   }
 }
