@@ -22,20 +22,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
         public abstract void Start(int numberOfBalls, Action<Vector2, IBall> upperLayerHandler);
         public abstract void Dispose();
-        public abstract void SpawnBall(Action<Vector2, IBall> upperLayerHandler);
-        public abstract IBusinessDimensions GetDimensions();
-
+        public abstract Vector2 GetDimensions();
     }
 
     public interface IBall
     {
         event EventHandler<Vector2> NewPositionNotification;
-    }
-
-    public interface IBusinessDimensions
-    {
-        double Width { get; init; }
-        double Height { get; init; }
-        double Diameter { get; init; }
     }
 }

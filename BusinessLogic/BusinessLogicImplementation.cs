@@ -44,10 +44,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic
               (startingPosition, databall) =>
               {
                   databall.NewPositionNotification += (s, pos) =>
-            {
-                CheckBallCollision(s, pos);
-                CheckWallCollision(s, pos);
-            };
+                  {
+                      CheckBallCollision(s, pos);
+                      CheckWallCollision(s, pos);
+                  };
                   var ball = new Ball(databall);
                   upperLayerHandler(new Vector2(startingPosition.X, startingPosition.Y), new Ball(databall));
               }
@@ -60,18 +60,18 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         {
             if (s == null) return;
             Data.IBall src = (Data.IBall)s;
-            Data.IDimensions dim = layerBellow.GetDimensions();
+            Vector2 dim = layerBellow.GetDimensions();
 
             if (
                 (src.Position.X <= 0 && src.Velocity.X <= 0) ||
-                (src.Position.X + src.Radius >= dim.Width && src.Velocity.X >= 0))
+                (src.Position.X + src.Radius + 10 >= dim.X && src.Velocity.X >= 0))
             {
                 InvokeWallCollision(src, isHorizontal: true);
                 return;
             }
             if (
                 (src.Position.Y <= 0 && src.Velocity.Y <= 0) ||
-                (src.Position.Y + src.Radius >= dim.Height && src.Velocity.Y >= 0))
+                (src.Position.Y + src.Radius + 10 >= dim.Y && src.Velocity.Y >= 0))
             {
                 InvokeWallCollision(src, isHorizontal: false);
                 return;
@@ -80,12 +80,12 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
         private void CheckBallCollision(object? s, Vector2 pos)
         {
+            if (s == null) return;
+            Data.IBall src = (Data.IBall)s;
+            Vector2 dim = layerBellow.GetDimensions();
+
             lock (_lock)
             {
-                if (s == null) return;
-                Data.IBall src = (Data.IBall)s;
-                Data.IDimensions dim = layerBellow.GetDimensions();
-
                 foreach (Data.IBall otherBall in layerBellow.GetBalls())
                 {
                     if (src.Equals(otherBall)) continue;
@@ -94,32 +94,26 @@ namespace TP.ConcurrentProgramming.BusinessLogic
             }
         }
 
-        public override void SpawnBall(Action<Vector2, IBall> upperLayerHandler)
-        {
-            layerBellow.SpawnBall(
-              (position, ball) => upperLayerHandler(
-                new Vector2(position.X, position.Y),
-                new Ball(ball)
-              )
-            );
-        }
-
         private bool IsColliding(Data.IBall first, Data.IBall second)
         {
             double dist = Math.Sqrt(Math.Pow(second.Position.X - first.Position.X, 2) +
                                    Math.Pow(second.Position.Y - first.Position.Y, 2));
-            if (dist <= first.Radius + second.Radius) return true;
-            return false;
+            return dist < (first.Radius + second.Radius) / 2;
         }
 
 
         private void InvokeBallCollision(Data.IBall ball, Data.IBall otherBall)
         {
-            double delta = Math.Sqrt(Math.Pow(
-              (ball.Position.X + ball.Velocity.X) - (otherBall.Position.X + otherBall.Velocity.X), 2) +
-                     Math.Pow((ball.Position.Y + ball.Velocity.Y) - (otherBall.Position.Y + otherBall.Velocity.Y), 2));
+            double delta = Math.Sqrt(
+              Math.Pow(
+              (ball.Position.X + ball.Velocity.X) -
+              (otherBall.Position.X + otherBall.Velocity.X), 2) +
+              Math.Pow(
+                (ball.Position.Y + ball.Velocity.Y) -
+                (otherBall.Position.Y + otherBall.Velocity.Y), 2)
+              );
 
-            if (delta > ball.Radius) return;
+            if (delta > (ball.Radius + otherBall.Radius) / 2) return;
 
             Vector2 temp = ball.Velocity;
             ball.Velocity = otherBall.Velocity;
@@ -130,7 +124,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         {
             if (isHorizontal)
             {
-                ball.Velocity = layerBellow.CreateVector(-ball.Velocity.X, ball.Velocity.Y);
+                ball.Velocity = layerBellow.CreateVector(
+                  -ball.Velocity.X,
+                  ball.Velocity.Y
+                );
             }
             else
             {
@@ -138,10 +135,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic
             }
         }
 
-        public override IBusinessDimensions GetDimensions()
+        public override Vector2 GetDimensions()
         {
             ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
-            return new BusinessDimensions(layerBellow.GetDimensions());
+            return layerBellow.GetDimensions();
         }
 
         [Conditional("DEBUG")]

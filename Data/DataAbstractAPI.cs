@@ -23,18 +23,10 @@ namespace TP.ConcurrentProgramming.Data
 
         public abstract void Dispose();
         public abstract void Start(int numberOfBalls, Action<Vector2, IBall> upperLayerHandler);
-        public abstract void SpawnBall(Action<Vector2, IBall> upperLayerHandler);
         public abstract Vector2 CreateVector(float x, float y);
-        public abstract IDimensions GetDimensions();
+        public abstract Vector2 GetDimensions();
         public abstract List<IBall> GetBalls();
         public abstract void BeginMovement();
-    }
-
-    public interface IDimensions
-    {
-        double Radius { get; init; }
-        int Height { get; init; }
-        int Width { get; init; }
     }
 
     public interface IBall

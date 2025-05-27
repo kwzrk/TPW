@@ -64,12 +64,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
         private class DataLayerConstructorFixcure : Data.DataAbstractAPI
         {
-            public override void SpawnBall(Action<Vector2, Data.IBall> upperLayerHandler)
-            {
-                throw new NotImplementedException();
-            }
-
-
             public override void Dispose()
             { }
 
@@ -89,7 +83,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
                 throw new NotImplementedException();
             }
 
-            public override IDimensions GetDimensions()
+            public override Vector2 GetDimensions()
             {
                 throw new NotImplementedException();
             }
@@ -119,11 +113,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
         {
             internal bool Disposed = false;
 
-            public override void SpawnBall(Action<Vector2, Data.IBall> upperLayerHandler)
-            {
-                throw new NotImplementedException();
-            }
-
             public override void Dispose()
             {
                 Disposed = true;
@@ -143,7 +132,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
             {
                 throw new NotImplementedException();
             }
-            public override IDimensions GetDimensions()
+            public override Vector2 GetDimensions()
             {
                 throw new NotImplementedException();
             }
@@ -184,11 +173,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
                 upperLayerHandler(new Vector2(0, 0), new DataBallFixture());
             }
 
-            public override void SpawnBall(Action<Vector2, Data.IBall> upperLayerHandler)
-            {
-                throw new NotImplementedException();
-            }
-
             public override Vector2 CreateVector(float x, float y)
             {
                 throw new NotImplementedException();
@@ -199,7 +183,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
                 throw new NotImplementedException();
             }
 
-            public override IDimensions GetDimensions()
+            public override Vector2 GetDimensions()
             {
                 throw new NotImplementedException();
             }

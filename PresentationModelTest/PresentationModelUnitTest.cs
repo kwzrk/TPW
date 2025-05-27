@@ -58,11 +58,6 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
             internal bool Disposed = false;
             internal int NumberOfBalls = 0;
 
-            public override void SpawnBall(Action<Vector2, BusinessLogic.IBall> upperLayerHandler)
-            {
-                throw new NotImplementedException();
-            }
-
             public override void Dispose()
             {
                 Disposed = true;
@@ -77,7 +72,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model.Test
                 Assert.IsNotNull(upperLayerHandler);
             }
 
-            public override IBusinessDimensions GetDimensions()
+            public override Vector2 GetDimensions()
             {
                 throw new NotImplementedException();
             }

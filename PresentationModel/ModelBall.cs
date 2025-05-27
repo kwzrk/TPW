@@ -26,7 +26,7 @@ namespace TP.ConcurrentProgramming.Presentation.Model
         {
             TopBackingField = top;
             LeftBackingField = left;
-            DiameterBackingField = LogicAPI.GetBusinessLogicLayer().GetDimensions().Diameter;
+            DiameterBackingField = 20;
             Debug.WriteLine($"ModelBall created at center: ({left}, {top})");
             underneathBall.NewPositionNotification += NewPositionNotification;
         }

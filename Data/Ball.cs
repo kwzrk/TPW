@@ -8,15 +8,18 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using System.Diagnostics;
 using System.Numerics;
 
 namespace TP.ConcurrentProgramming.Data
 {
     internal class Ball : IBall, IDisposable
     {
-        private readonly object _lock = new object();
+        private readonly object _velocity_lock = new object();
+        private readonly object _position_lock = new object();
         private Vector2 _position;
         private Vector2 _velocity;
+        private readonly Vector2 Dimension;
         private readonly int _delay = 16;
         private CancellationTokenSource? _moveCancellation;
         private Task? _moveTask;
@@ -26,20 +29,21 @@ namespace TP.ConcurrentProgramming.Data
 
         public Vector2 Velocity
         {
-            get { lock (_lock) return _velocity; }
-            set { lock (_lock) _velocity = (Vector2)value; }
+            get { lock (_velocity_lock) return _velocity; }
+            set { lock (_velocity_lock) _velocity = (Vector2)value; }
         }
 
-        public Vector2 Position { get { lock (_lock) return _position; } }
+        public Vector2 Position { get { lock (_position_lock) return _position; } }
 
         private readonly double _radius;
         public double Radius => _radius;
 
-        internal Ball(Vector2 initialPosition, Vector2 initialVelocity, int delay = 16)
+        internal Ball(Vector2 initialPosition, Vector2 initialVelocity, Vector2 Dimension, int delay = 16)
         {
             _position = initialPosition;
             _velocity = initialVelocity;
             _radius = 20;
+            this.Dimension = Dimension;
             _delay = delay;
         }
 
@@ -61,16 +65,19 @@ namespace TP.ConcurrentProgramming.Data
 
         private async Task MoveContinuouslyAsync(CancellationToken ct)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            long lastUpdate = stopwatch.ElapsedMilliseconds;
 
             while (!ct.IsCancellationRequested)
             {
-                int actualDelay = (int)(_delay / _velocity.Length());
-                actualDelay = Math.Max(actualDelay, 1);
+                long now = stopwatch.ElapsedMilliseconds;
+                long deltaTime = (now - lastUpdate);
+                lastUpdate = now;
 
-                lock (_lock) _position = Vector2.Add(_position, _velocity);
+                lock (_position_lock) _position = Vector2.Add(_position, Vector2.Normalize(_velocity) * deltaTime / 60);
                 NewPositionNotification?.Invoke(this, _position);
-
-                await Task.Delay(actualDelay, ct);
+                await Task.Delay(16, ct);
             }
 
             MovingEndedNotification?.Invoke(this, _position);
@@ -81,10 +88,10 @@ namespace TP.ConcurrentProgramming.Data
         internal async Task Move()
         {
             await Task.Run(() =>
-             {
-                 _position = Vector2.Add(_position, _velocity);
-                 NewPositionNotification?.Invoke(this, _position);
-             }
+              {
+                  _position = Vector2.Add(_position, _velocity);
+                  NewPositionNotification?.Invoke(this, _position);
+              }
             );
         }
     }

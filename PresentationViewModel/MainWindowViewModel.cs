@@ -33,7 +33,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
 
             // Subscribe to the window size changed event
             WindowSizeChangedEvent += ModelLayer.ChangingWindowSize;
-            
+
             // ICommand Section 
             StartCommand = new RelayCommand(StartSimulation);
             IncreaseSizeCommand = new RelayCommand(IncreaseSize);
@@ -86,10 +86,10 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
             {
                 _windowHeight = BorderHeight + 100;
             }
-            
+
             RaisePropertyChanged(nameof(WindowWidth));
             RaisePropertyChanged(nameof(WindowHeight));
-            
+
             RaisePropertyChanged(nameof(BorderWidth));
             RaisePropertyChanged(nameof(BorderHeight));
             WindowSizeChangedEvent?.Invoke(WindowWidth, WindowHeight);

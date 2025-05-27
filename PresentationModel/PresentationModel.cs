@@ -76,9 +76,9 @@ namespace TP.ConcurrentProgramming.Presentation.Model
         public override void ChangingWindowSize(double width, double height)
         {
             var dim = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions();
-            Debug.WriteLine($"Board Dimensions - Raw: W={dim.Width}, H={dim.Height} | Scaled: W={BoardWidth}, H={BoardHeight}");
-            double minWidth = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Width;
-            double minHeight = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Height;
+            Debug.WriteLine($"Board Dimensions - Raw: W={dim.X}, H={dim.Y} | Scaled: W={BoardWidth}, H={BoardHeight}");
+            double minWidth = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().X;
+            double minHeight = UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Y;
 
             if (width < minWidth || height < minHeight)
             {
@@ -87,12 +87,12 @@ namespace TP.ConcurrentProgramming.Presentation.Model
             }
             else if (height < width)
             {
-                ScaleHeight = (height - 200) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Height;
+                ScaleHeight = (height - 200) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Y;
                 ScaleWidth = ScaleHeight;
             }
             else
             {
-                ScaleWidth = (width - 200) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Width;
+                ScaleWidth = (width - 200) / UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().X;
                 ScaleHeight = ScaleWidth;
             }
             Scale?.Invoke(ScaleWidth, ScaleHeight);
@@ -100,8 +100,8 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
         public override double ScaleWidth { get; protected set; } = 1.0;
         public override double ScaleHeight { get; protected set; } = 1.0;
-        public override double BoardHeight => ScaleHeight * UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Height;
-        public override double BoardWidth => ScaleWidth * UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Width;
+        public override double BoardHeight => ScaleHeight * UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().Y;
+        public override double BoardWidth => ScaleWidth * UnderneathLayerAPI.GetBusinessLogicLayer().GetDimensions().X;
 
         public event Action<double, double> Scale;
 

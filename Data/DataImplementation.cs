@@ -5,12 +5,11 @@ namespace TP.ConcurrentProgramming.Data
 {
     internal class DataImplementation : DataAbstractAPI
     {
+        public static readonly Vector2 Dimensions = new Vector2(400, 400);
         private readonly object _lock = new object();
         private bool Disposed = false;
         private Random RandomGenerator = new();
         private List<Ball> BallsList = [];
-
-        public readonly Dimensions _dimensions = new Dimensions(20, 400, 420);
 
         public override void Start(
           int numberOfBalls,
@@ -22,43 +21,24 @@ namespace TP.ConcurrentProgramming.Data
             foreach (var _ in Enumerable.Range(0, numberOfBalls))
             {
                 Vector2 startingPosition = new(
-                  RandomGenerator.Next(10, _dimensions.Width - 50),
-                  RandomGenerator.Next(10, _dimensions.Height - 50)
+                    RandomGenerator.Next(10, (int)(Dimensions.X) - 50),
+                    RandomGenerator.Next(10, (int)(Dimensions.Y) - 50)
                 );
 
                 Vector2 initialVelocity = new(
-                  (float)(RandomGenerator.NextDouble() - 0.5) * 10,
-                  (float)(RandomGenerator.NextDouble() - 0.5) * 10
+                  (float)(RandomGenerator.NextDouble() - 0.5),
+                  (float)(RandomGenerator.NextDouble() - 0.5)
                 );
 
-                double radius = _dimensions.Radius;
-
-                Ball newBall = new(startingPosition, initialVelocity);
+                Ball newBall = new(startingPosition, initialVelocity, Dimensions);
                 upperLayerHandler(startingPosition, newBall);
                 BallsList.Add(newBall);
             }
         }
-
-        public override void SpawnBall(Action<Vector2, IBall> upperLayerHandler)
+        public override Vector2 GetDimensions()
         {
-            ObjectDisposedException.ThrowIf(Disposed, nameof(DataImplementation));
-            ArgumentNullException.ThrowIfNull(upperLayerHandler);
-
-            Vector2 startingPosition = new(
-              (float)RandomGenerator.Next(100, 400 - 100),
-              (float)RandomGenerator.Next(100, 400 - 100)
-            );
-
-            Vector2 initialVelocity = new(
-                (float)(RandomGenerator.NextDouble() - 0.5),
-                (float)(RandomGenerator.NextDouble() - 0.5)
-            );
-
-            Ball newBall = new(startingPosition, initialVelocity);
-            upperLayerHandler(startingPosition, newBall);
-            BallsList.Add(newBall);
+            return Dimensions;
         }
-
         protected virtual void Dispose(bool disposing)
         {
             ObjectDisposedException.ThrowIf(Disposed, nameof(DataImplementation));
@@ -98,8 +78,6 @@ namespace TP.ConcurrentProgramming.Data
                 return BallsList.Select(ball => (IBall)ball).ToList();
             }
         }
-
-        public override IDimensions GetDimensions() => _dimensions;
 
         [Conditional("DEBUG")]
         internal void CheckBallsList(Action<IEnumerable<IBall>> returnBallsList)
