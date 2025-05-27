@@ -9,140 +9,145 @@
 //_____________________________________________________________________________________________________________________________________
 
 using System.Diagnostics;
+using System.Numerics;
 using TP.ConcurrentProgramming.Data;
 using UnderneathLayerAPI = TP.ConcurrentProgramming.Data.DataAbstractAPI;
 
 namespace TP.ConcurrentProgramming.BusinessLogic
 {
-  internal class BusinessLogicImplementation : BusinessLogicAbstractAPI
-  {
-    private bool Disposed = false;
-    private readonly UnderneathLayerAPI layerBellow;
-    public BusinessLogicImplementation() : this(null) { }
-    internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer)
+    internal class BusinessLogicImplementation : BusinessLogicAbstractAPI
     {
-      layerBellow = underneathLayer ?? UnderneathLayerAPI.GetDataLayer();
-    }
-    public override void Dispose()
-    {
-      ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
-      layerBellow.Dispose();
-      Disposed = true;
-    }
-    public override void Start(
-      int numberOfBalls,
-      Action<IPosition, IBall> upperLayerHandler
-    )
-    {
-      ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
-      ArgumentNullException.ThrowIfNull(upperLayerHandler);
-
-      layerBellow.Start(
-        numberOfBalls,
-        (startingPosition, databall) =>
+        private bool Disposed = false;
+        private Object _lock = new();
+        private readonly UnderneathLayerAPI layerBellow;
+        public BusinessLogicImplementation() : this(null) { }
+        internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer)
         {
-          databall.NewPositionNotification += (s, pos) =>
-          {
-            CheckBallCollision(s, pos);
-            CheckWallCollision(s, pos);
-          };
-          var ball = new Ball(databall);
-          upperLayerHandler(new Position(startingPosition.x, startingPosition.y), new Ball(databall));
+            layerBellow = underneathLayer ?? UnderneathLayerAPI.GetDataLayer();
         }
-      );
-
-      layerBellow.BeginMovement();
-    }
-
-    private void CheckWallCollision(object? s, IVector pos)
-    {
-      if (s == null) return;
-      Data.IBall src = (Data.IBall)s;
-      Data.IDimensions dim = layerBellow.GetDimensions();
-
-      if (
-          (src.Position.x <= 0 && src.Velocity.x <= 0) ||
-          (src.Position.x + src.Radius >= dim.Width && src.Velocity.x >= 0))
-      {
-        InvokeWallCollision(src, isHorizontal: true);
-        return;
-      }
-      if (
-          (src.Position.y <= 0 && src.Velocity.y <= 0) ||
-          (src.Position.y + src.Radius >= dim.Height && src.Velocity.y >= 0))
-      {
-        InvokeWallCollision(src, isHorizontal: false);
-        return;
-      }
-    }
-
-    private void CheckBallCollision(object? s, IVector pos)
-    {
-      if (s == null) return;
-      Data.IBall src = (Data.IBall)s;
-      Data.IDimensions dim = layerBellow.GetDimensions();
-
-      foreach (Data.IBall otherBall in layerBellow.GetBalls())
-      {
-        if (src.Equals(otherBall)) continue;
-        if (IsColliding(src, otherBall)) InvokeBallCollision(src, otherBall);
-      }
-    }
-
-    public override void SpawnBall(Action<IPosition, IBall> upperLayerHandler)
-    {
-      layerBellow.SpawnBall(
-        (position, ball) => upperLayerHandler(
-          new Position(position.x, position.y),
-          new Ball(ball)
+        public override void Dispose()
+        {
+            ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
+            layerBellow.Dispose();
+            Disposed = true;
+        }
+        public override void Start(
+          int numberOfBalls,
+          Action<Vector2, IBall> upperLayerHandler
         )
-      );
+        {
+            ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
+            ArgumentNullException.ThrowIfNull(upperLayerHandler);
+
+            layerBellow.Start(
+              numberOfBalls,
+              (startingPosition, databall) =>
+              {
+                  databall.NewPositionNotification += (s, pos) =>
+            {
+                CheckBallCollision(s, pos);
+                CheckWallCollision(s, pos);
+            };
+                  var ball = new Ball(databall);
+                  upperLayerHandler(new Vector2(startingPosition.X, startingPosition.Y), new Ball(databall));
+              }
+            );
+
+            layerBellow.BeginMovement();
+        }
+
+        private void CheckWallCollision(object? s, Vector2 pos)
+        {
+            if (s == null) return;
+            Data.IBall src = (Data.IBall)s;
+            Data.IDimensions dim = layerBellow.GetDimensions();
+
+            if (
+                (src.Position.X <= 0 && src.Velocity.X <= 0) ||
+                (src.Position.X + src.Radius >= dim.Width && src.Velocity.X >= 0))
+            {
+                InvokeWallCollision(src, isHorizontal: true);
+                return;
+            }
+            if (
+                (src.Position.Y <= 0 && src.Velocity.Y <= 0) ||
+                (src.Position.Y + src.Radius >= dim.Height && src.Velocity.Y >= 0))
+            {
+                InvokeWallCollision(src, isHorizontal: false);
+                return;
+            }
+        }
+
+        private void CheckBallCollision(object? s, Vector2 pos)
+        {
+            lock (_lock)
+            {
+                if (s == null) return;
+                Data.IBall src = (Data.IBall)s;
+                Data.IDimensions dim = layerBellow.GetDimensions();
+
+                foreach (Data.IBall otherBall in layerBellow.GetBalls())
+                {
+                    if (src.Equals(otherBall)) continue;
+                    if (IsColliding(src, otherBall)) InvokeBallCollision(src, otherBall);
+                }
+            }
+        }
+
+        public override void SpawnBall(Action<Vector2, IBall> upperLayerHandler)
+        {
+            layerBellow.SpawnBall(
+              (position, ball) => upperLayerHandler(
+                new Vector2(position.X, position.Y),
+                new Ball(ball)
+              )
+            );
+        }
+
+        private bool IsColliding(Data.IBall first, Data.IBall second)
+        {
+            double dist = Math.Sqrt(Math.Pow(second.Position.X - first.Position.X, 2) +
+                                   Math.Pow(second.Position.Y - first.Position.Y, 2));
+            if (dist <= first.Radius + second.Radius) return true;
+            return false;
+        }
+
+
+        private void InvokeBallCollision(Data.IBall ball, Data.IBall otherBall)
+        {
+            double delta = Math.Sqrt(Math.Pow(
+              (ball.Position.X + ball.Velocity.X) - (otherBall.Position.X + otherBall.Velocity.X), 2) +
+                     Math.Pow((ball.Position.Y + ball.Velocity.Y) - (otherBall.Position.Y + otherBall.Velocity.Y), 2));
+
+            if (delta > ball.Radius) return;
+
+            Vector2 temp = ball.Velocity;
+            ball.Velocity = otherBall.Velocity;
+            otherBall.Velocity = temp;
+        }
+
+        private void InvokeWallCollision(Data.IBall ball, bool isHorizontal)
+        {
+            if (isHorizontal)
+            {
+                ball.Velocity = layerBellow.CreateVector(-ball.Velocity.X, ball.Velocity.Y);
+            }
+            else
+            {
+                ball.Velocity = layerBellow.CreateVector(ball.Velocity.X, -ball.Velocity.Y);
+            }
+        }
+
+        public override IBusinessDimensions GetDimensions()
+        {
+            ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
+            return new BusinessDimensions(layerBellow.GetDimensions());
+        }
+
+        [Conditional("DEBUG")]
+        internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)
+        {
+            returnInstanceDisposed(Disposed);
+        }
     }
-
-    private bool IsColliding(Data.IBall first, Data.IBall second)
-    {
-      double dist = Math.Sqrt(Math.Pow(second.Position.x - first.Position.x, 2) +
-                             Math.Pow(second.Position.y - first.Position.y, 2));
-      if (dist <= first.Radius + second.Radius) return true;
-      return false;
-    }
-
-
-    private void InvokeBallCollision(Data.IBall ball, Data.IBall otherBall)
-    {
-      double delta = Math.Sqrt(Math.Pow(
-        (ball.Position.x + ball.Velocity.x) - (otherBall.Position.x + otherBall.Velocity.x), 2) +
-               Math.Pow((ball.Position.y + ball.Velocity.y) - (otherBall.Position.y + otherBall.Velocity.y), 2));
-
-      if (delta > ball.Radius) return;
-
-      Data.IVector temp = ball.Velocity;
-      ball.Velocity = otherBall.Velocity;
-      otherBall.Velocity = temp;
-    }
-
-    private void InvokeWallCollision(Data.IBall ball, bool isHorizontal)
-    {
-      if (isHorizontal)
-      {
-        ball.Velocity = layerBellow.CreateVector(-ball.Velocity.x, ball.Velocity.y);
-      }
-      else
-      {
-        ball.Velocity = layerBellow.CreateVector(ball.Velocity.x, -ball.Velocity.y);
-      }
-    }
-
-    public override IBusinessDimensions GetDimensions()
-    {
-      ObjectDisposedException.ThrowIf(Disposed, nameof(BusinessLogicImplementation));
-      return new BusinessDimensions(layerBellow.GetDimensions());
-    }
-
-    [Conditional("DEBUG")]
-    internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)
-    {
-      returnInstanceDisposed(Disposed);
-    }
-  }
 }

@@ -8,54 +8,56 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using System.Numerics;
+
 namespace TP.ConcurrentProgramming.Data.Test
 {
-  [TestClass]
-  public class BallUnitTest
-  {
-    [TestMethod]
-    public void ConstructorTestMethod()
+    [TestClass]
+    public class BallUnitTest
     {
-      Vector testinVector = new Vector(0.0, 0.0);
-      Ball newInstance = new(testinVector, testinVector, 20);
-    }
-
-    [TestMethod]
-    public async void MoveTestMethod()
-    {
-      Vector initialPosition = new(10.0, 10.0);
-      Ball newInstance = new(initialPosition, new Vector(0.0, 0.0), 20);
-      IVector curentPosition = new Vector(0.0, 0.0);
-      int numberOfCallBackCalled = 0;
-      newInstance.NewPositionNotification += (sender, position) =>
+        [TestMethod]
+        public void ConstructorTestMethod()
         {
-          Assert.IsNotNull(sender); curentPosition = position; numberOfCallBackCalled++;
-        };
+            Vector2 testinVector2 = new Vector2(0.0f, 0.0f);
+            Ball newInstance = new(testinVector2, testinVector2, 20);
+        }
 
-      await newInstance.Move();
-      Assert.AreEqual<int>(1, numberOfCallBackCalled);
-      Assert.AreEqual<IVector>(initialPosition, curentPosition);
-    }
-
-    [TestMethod]
-    public void BallVelocityAsync()
-    {
-      var ball = new Ball(new Vector(0, 0), new Vector(1, 1), 5);
-      var tasks = new List<Task>();
-
-      for (int i = 0; i < 1000; i++)
-      {
-        int j = i;
-        tasks.Add(Task.Run(() =>
+        [TestMethod]
+        public async void MoveTestMethod()
         {
-          ball.Velocity = new Vector(j, j);
-        }));
-      }
+            Vector2 initialPosition = new(10.0f, 10.0f);
+            Ball newInstance = new(initialPosition, new Vector2(0.0f, 0.0f), 20);
+            Vector2 curentPosition = new Vector2(0.0f, 0.0f);
+            int numberOfCallBackCalled = 0;
+            newInstance.NewPositionNotification += (sender, position) =>
+              {
+                  Assert.IsNotNull(sender); curentPosition = position; numberOfCallBackCalled++;
+              };
 
-      Task.WaitAll(tasks.ToArray());
+            await newInstance.Move();
+            Assert.AreEqual<int>(1, numberOfCallBackCalled);
+            Assert.AreEqual<Vector2>(initialPosition, curentPosition);
+        }
 
-      var velocity = ball.Velocity;
-      Assert.IsTrue(velocity != null);
+        [TestMethod]
+        public void BallVelocityAsync()
+        {
+            var ball = new Ball(new Vector2(0, 0), new Vector2(1, 1), 5);
+            var tasks = new List<Task>();
+
+            for (int i = 0; i < 10.0f; i++)
+            {
+                int j = i;
+                tasks.Add(Task.Run(() =>
+                {
+                    ball.Velocity = new Vector2(j, j);
+                }));
+            }
+
+            Task.WaitAll(tasks.ToArray());
+
+            var velocity = ball.Velocity;
+            Assert.IsTrue(velocity != null);
+        }
     }
-  }
 }

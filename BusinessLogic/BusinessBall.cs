@@ -7,21 +7,22 @@
 //  https://github.com/mpostol/TP/discussions/182
 //
 //_____________________________________________________________________________________________________________________________________
+using System.Numerics;
 
 namespace TP.ConcurrentProgramming.BusinessLogic
 {
-  internal class Ball : IBall
-  {
-    public event EventHandler<IPosition>? NewPositionNotification;
-
-    public Ball(Data.IBall ball)
+    internal class Ball : IBall
     {
-      ball.NewPositionNotification += RaisePositionChangeEvent;
-    }
+        public event EventHandler<Vector2>? NewPositionNotification;
 
-    private void RaisePositionChangeEvent(object? sender, Data.IVector e)
-    {
-      NewPositionNotification?.Invoke(this, new Position(e.x, e.y));
+        public Ball(Data.IBall ball)
+        {
+            ball.NewPositionNotification += RaisePositionChangeEvent;
+        }
+
+        private void RaisePositionChangeEvent(object? sender, Vector2 e)
+        {
+            NewPositionNotification?.Invoke(this, new Vector2(e.X, e.Y));
+        }
     }
-  }
 }

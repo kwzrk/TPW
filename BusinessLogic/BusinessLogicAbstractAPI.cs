@@ -8,37 +8,34 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using System.Numerics;
+
 namespace TP.ConcurrentProgramming.BusinessLogic
 {
-  public abstract class BusinessLogicAbstractAPI : IDisposable
-  {
-    private static
-    Lazy<BusinessLogicAbstractAPI> modelInstance = new Lazy<BusinessLogicAbstractAPI>(
-      () => new BusinessLogicImplementation()
-    );
-    public static BusinessLogicAbstractAPI GetBusinessLogicLayer() { return modelInstance.Value; }
+    public abstract class BusinessLogicAbstractAPI : IDisposable
+    {
+        private static
+        Lazy<BusinessLogicAbstractAPI> modelInstance = new Lazy<BusinessLogicAbstractAPI>(
+          () => new BusinessLogicImplementation()
+        );
+        public static BusinessLogicAbstractAPI GetBusinessLogicLayer() { return modelInstance.Value; }
 
-    public abstract void Start(int numberOfBalls, Action<IPosition, IBall> upperLayerHandler);
-    public abstract void Dispose();
-    public abstract void SpawnBall(Action<IPosition, IBall> upperLayerHandler);
-    public abstract IBusinessDimensions GetDimensions();
+        public abstract void Start(int numberOfBalls, Action<Vector2, IBall> upperLayerHandler);
+        public abstract void Dispose();
+        public abstract void SpawnBall(Action<Vector2, IBall> upperLayerHandler);
+        public abstract IBusinessDimensions GetDimensions();
 
-  }
+    }
 
-  public interface IPosition
-  {
-    double x { get; init; }
-    double y { get; init; }
-  }
-  public interface IBall
-  {
-    event EventHandler<IPosition> NewPositionNotification;
-  }
+    public interface IBall
+    {
+        event EventHandler<Vector2> NewPositionNotification;
+    }
 
-  public interface IBusinessDimensions
-  {
-    double Width { get; init; }
-    double Height { get; init; }
-    double Diameter { get; init; }
-  }
+    public interface IBusinessDimensions
+    {
+        double Width { get; init; }
+        double Height { get; init; }
+        double Diameter { get; init; }
+    }
 }

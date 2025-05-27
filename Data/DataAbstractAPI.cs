@@ -8,49 +8,42 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using System.Numerics;
+
 namespace TP.ConcurrentProgramming.Data
 {
-  public abstract class DataAbstractAPI : IDisposable
-  {
-    private static Lazy<DataAbstractAPI> modelInstance = new Lazy<DataAbstractAPI>(() => new DataImplementation());
-
-    public static DataAbstractAPI GetDataLayer()
+    public abstract class DataAbstractAPI : IDisposable
     {
-      return modelInstance.Value;
+        private static Lazy<DataAbstractAPI> modelInstance = new Lazy<DataAbstractAPI>(() => new DataImplementation());
+
+        public static DataAbstractAPI GetDataLayer()
+        {
+            return modelInstance.Value;
+        }
+
+        public abstract void Dispose();
+        public abstract void Start(int numberOfBalls, Action<Vector2, IBall> upperLayerHandler);
+        public abstract void SpawnBall(Action<Vector2, IBall> upperLayerHandler);
+        public abstract Vector2 CreateVector(float x, float y);
+        public abstract IDimensions GetDimensions();
+        public abstract List<IBall> GetBalls();
+        public abstract void BeginMovement();
     }
 
-    public abstract void Dispose();
-    public abstract void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler);
-    public abstract void SpawnBall(Action<IVector, IBall> upperLayerHandler);
-    public abstract IVector CreateVector(double x, double y);
-    public abstract IDimensions GetDimensions();
-    public abstract List<IBall> GetBalls();
-    public abstract void BeginMovement();
-  }
+    public interface IDimensions
+    {
+        double Radius { get; init; }
+        int Height { get; init; }
+        int Width { get; init; }
+    }
 
-  public interface IDimensions
-  {
-    double Radius { get; init; }
-    int Height { get; init; }
-    int Width { get; init; }
-  }
-
-  public interface IVector
-  {
-    double x { get; init; }
-    double y { get; init; }
-    IVector Normalize();
-    float Dot(IVector vec);
-    float Length();
-  }
-
-  public interface IBall
-  {
-    event EventHandler<IVector> NewPositionNotification;
-    IVector Velocity { get; set; }
-    IVector Position { get; }
-    double Radius { get; }
-    public Task StartMovement();
-    public void StopMovement();
-  }
+    public interface IBall
+    {
+        event EventHandler<Vector2> NewPositionNotification;
+        Vector2 Velocity { get; set; }
+        Vector2 Position { get; }
+        double Radius { get; }
+        public Task StartMovement();
+        public void StopMovement();
+    }
 }
