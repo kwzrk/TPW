@@ -24,6 +24,10 @@ namespace TP.ConcurrentProgramming.Data
         private CancellationTokenSource? _moveCancellation;
         private Task? _moveTask;
 
+        private static int _nextBallId = 0;
+        private readonly int _ballId;
+        private readonly ILogger _logger;
+
         public event EventHandler<Vector2>? NewPositionNotification;
         public event EventHandler<Vector2>? MovingEndedNotification;
 
@@ -40,11 +44,28 @@ namespace TP.ConcurrentProgramming.Data
 
         internal Ball(Vector2 initialPosition, Vector2 initialVelocity, Vector2 Dimension, int delay = 16)
         {
+            _ballId = Interlocked.Increment(ref _nextBallId);
+
             _position = initialPosition;
             _velocity = initialVelocity;
             _radius = 20;
             this.Dimension = Dimension;
             _delay = delay;
+        }
+
+
+        internal Ball(Vector2 initialPosition, Vector2 initialVelocity, Vector2 Dimension, ILogger logger, int delay = 16)
+        {
+            _ballId = Interlocked.Increment(ref _nextBallId);
+
+            _position = initialPosition;
+            _velocity = initialVelocity;
+            _radius = 20;
+            this.Dimension = Dimension;
+            _delay = delay;
+
+            _logger = logger;
+            _logger.Log($"Ball {_ballId} created at Pos: ({_position.X:F2},{_position.Y:F2}), Vel: ({_velocity.X:F2},{_velocity.Y:F2})");
         }
 
         public async Task StartMovement()
@@ -54,12 +75,14 @@ namespace TP.ConcurrentProgramming.Data
                  StopMovement();
                  _moveCancellation = new CancellationTokenSource();
                  _moveTask = MoveContinuouslyAsync(_moveCancellation.Token);
+                 _logger.Log($"Ball {_ballId} movement started.");
              });
         }
 
         public void StopMovement()
         {
             _moveCancellation?.Cancel();
+            _logger.Log($"Ball {_ballId} movement stopped.");
             _moveTask = null;
         }
 
@@ -91,6 +114,7 @@ namespace TP.ConcurrentProgramming.Data
               {
                   _position = Vector2.Add(_position, _velocity);
                   NewPositionNotification?.Invoke(this, _position);
+                  _logger.LogBallState(_ballId, _position, _velocity);
               }
             );
         }

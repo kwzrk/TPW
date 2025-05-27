@@ -20,7 +20,7 @@ namespace TP.ConcurrentProgramming.Data.Test
         {
             Vector2 Dimensions = new(100, 100);
             Vector2 testinVector2 = new Vector2(0.0f, 0.0f);
-            Ball newInstance = new(testinVector2, testinVector2, Dimensions, 20);
+            Ball newInstance = new(testinVector2, testinVector2, Dimensions);
         }
 
         [TestMethod]

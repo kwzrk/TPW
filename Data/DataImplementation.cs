@@ -10,6 +10,13 @@ namespace TP.ConcurrentProgramming.Data
         private bool Disposed = false;
         private Random RandomGenerator = new();
         private List<Ball> BallsList = [];
+        private readonly ILogger _logger;
+
+        public DataImplementation()
+        {
+            _logger = new Logger(); // Instantiate the logger
+            _logger.Log("Data Layer: Initialized.");
+        }
 
         public override void Start(
           int numberOfBalls,
@@ -18,6 +25,7 @@ namespace TP.ConcurrentProgramming.Data
         {
             ObjectDisposedException.ThrowIf(Disposed, nameof(DataImplementation));
             ArgumentNullException.ThrowIfNull(upperLayerHandler);
+            _logger.Log($"Data Layer: Starting with {numberOfBalls} balls.");
             foreach (var _ in Enumerable.Range(0, numberOfBalls))
             {
                 Vector2 startingPosition = new(
@@ -30,9 +38,10 @@ namespace TP.ConcurrentProgramming.Data
                   (float)(RandomGenerator.NextDouble() - 0.5)
                 );
 
-                Ball newBall = new(startingPosition, initialVelocity, Dimensions);
+                Ball newBall = new(startingPosition, initialVelocity, Dimensions, _logger);
                 upperLayerHandler(startingPosition, newBall);
                 BallsList.Add(newBall);
+                _logger.Log($"Data Layer: Created ball at {startingPosition} with velocity {initialVelocity}");
             }
         }
         public override Vector2 GetDimensions()

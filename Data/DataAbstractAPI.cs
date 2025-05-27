@@ -38,4 +38,10 @@ namespace TP.ConcurrentProgramming.Data
         public Task StartMovement();
         public void StopMovement();
     }
+
+    internal interface ILogger
+    {
+        public abstract void Log(string message);
+        public void LogBallState(int ballId, Vector2 position, Vector2 velocity);
+    }
 }
