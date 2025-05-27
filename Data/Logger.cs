@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace TP.ConcurrentProgramming.Data
@@ -15,8 +16,22 @@ namespace TP.ConcurrentProgramming.Data
 
         public Logger()
         {
-            string logDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+            string currentBaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string? tpwMainDirectory = Directory.GetParent(currentBaseDirectory)?
+                                        .Parent?
+                                        .Parent?
+                                        .Parent? 
+                                        .Parent? 
+                                        .FullName;
+            if (string.IsNullOrEmpty(tpwMainDirectory))
+            {
+                tpwMainDirectory = currentBaseDirectory;
+                Debug.WriteLine("Could not determine TPWMain directory. Logging in application base directory.");
+            }
+            string logDirectory = Path.Combine(tpwMainDirectory, "Logs");
             Directory.CreateDirectory(logDirectory);
+            Debug.WriteLine($"Log directory created at: {logDirectory}");
+
             _logFilePath = Path.Combine(logDirectory, $"BallSimulationLog_{DateTime.Now:yyyyMMdd_HHmmss}.log");
             _loggingTask = Task.Run(() => ProcessLogQueue(_cancellationTokenSource.Token));
         }

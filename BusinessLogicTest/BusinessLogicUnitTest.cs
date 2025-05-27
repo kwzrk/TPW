@@ -265,8 +265,8 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
             Vector2 dimensions = businessLogic.GetDimensions();
 
             Assert.IsNotNull(dimensions);
-            Assert.AreEqual(400, dimensions.Y);
-            Assert.AreEqual(420, dimensions.X);
+            Assert.AreEqual(420, dimensions.Y);
+            Assert.AreEqual(400, dimensions.X);
         }
 
         [TestMethod]

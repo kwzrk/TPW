@@ -28,7 +28,10 @@ namespace TP.ConcurrentProgramming.Data.Test
         {
             Vector2 Dimensions = new(100, 100);
             Vector2 initialPosition = new(10.0f, 10.0f);
-            Ball newInstance = new(initialPosition, new Vector2(0.0f, 0.0f), Dimensions, 20);
+            
+            Logger logger = new Logger();
+
+            Ball newInstance = new(initialPosition, new Vector2(0.0f, 0.0f), Dimensions,logger, 20);
             Vector2 curentPosition = new Vector2(0.0f, 0.0f);
             int numberOfCallBackCalled = 0;
             newInstance.NewPositionNotification += (sender, position) =>

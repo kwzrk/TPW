@@ -51,6 +51,7 @@ namespace TP.ConcurrentProgramming.Data
             _radius = 20;
             this.Dimension = Dimension;
             _delay = delay;
+            _logger = null;
         }
 
 
