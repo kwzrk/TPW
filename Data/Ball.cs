@@ -26,7 +26,7 @@ namespace TP.ConcurrentProgramming.Data
 
         private static int _nextBallId = 0;
         private readonly int _ballId;
-        private readonly ILogger _logger;
+        private readonly ILogger? _logger;
 
         public event EventHandler<Vector2>? NewPositionNotification;
         public event EventHandler<Vector2>? MovingEndedNotification;
