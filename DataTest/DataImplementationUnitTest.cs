@@ -27,23 +27,23 @@ namespace TP.ConcurrentProgramming.Data.Test
             }
         }
 
-        // [TestMethod]
-        // public void DisposeTestMethod()
-        // {
-        //   DataImplementation newInstance = new DataImplementation();
-        //   bool newInstanceDisposed = false;
-        //   newInstance.CheckObjectDisposed(x => newInstanceDisposed = x);
-        //   Assert.IsFalse(newInstanceDisposed);
-        //   newInstance.Dispose();
-        //   newInstance.CheckObjectDisposed(x => newInstanceDisposed = x);
-        //   Assert.IsTrue(newInstanceDisposed);
-        //   IEnumerable<IBall>? ballsList = null;
-        //   newInstance.CheckBallsList(x => ballsList = x);
-        //   Assert.IsNotNull(ballsList);
-        //   newInstance.CheckNumberOfBalls(x => Assert.AreEqual<int>(0, x));
-        //   Assert.ThrowsException<ObjectDisposedException>(() => newInstance.Dispose());
-        //   Assert.ThrowsException<ObjectDisposedException>(() => newInstance.Start(0, (position, ball) => { }));
-        // }
+        [TestMethod]
+        public void DisposeTestMethod()
+        {
+            DataImplementation newInstance = new DataImplementation();
+            bool newInstanceDisposed = false;
+            newInstance.CheckObjectDisposed(x => newInstanceDisposed = x);
+            Assert.IsFalse(newInstanceDisposed);
+            newInstance.Dispose();
+            newInstance.CheckObjectDisposed(x => newInstanceDisposed = x);
+            Assert.IsTrue(newInstanceDisposed);
+            IEnumerable<IBall>? ballsList = null;
+            newInstance.CheckBallsList(x => ballsList = x);
+            Assert.IsNotNull(ballsList);
+            newInstance.CheckNumberOfBalls(x => Assert.AreEqual<int>(0, x));
+            Assert.ThrowsException<ObjectDisposedException>(() => newInstance.Dispose());
+            Assert.ThrowsException<ObjectDisposedException>(() => newInstance.Start(0, (position, ball) => { }));
+        }
 
         [TestMethod]
         public void StartTestMethod()
