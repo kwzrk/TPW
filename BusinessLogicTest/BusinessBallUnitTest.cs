@@ -34,14 +34,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
         private class DataBallFixture : Data.IBall
         {
-            public Vector2 Velocity
-            {
-                get => throw new NotImplementedException();
-                set => throw new NotImplementedException();
-            }
-            public Vector2 Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+            public Vector2 Velocity { get; set; } = new Vector2(0, 0);
+            public Vector2 Position { get; set; } = new Vector2(0, 0);
 
-            public double Radius => throw new NotImplementedException();
+            public double Radius { get; set; } = 10;
 
             public event EventHandler<Vector2>? NewPositionNotification;
 
@@ -53,12 +49,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
             public Task StartMovement()
             {
-                throw new NotImplementedException();
+                return Task.CompletedTask;
             }
 
             public void StopMovement()
             {
-                throw new NotImplementedException();
             }
 
             public override string? ToString()

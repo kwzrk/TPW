@@ -24,7 +24,7 @@ namespace TP.ConcurrentProgramming.Data.Test
         }
 
         [TestMethod]
-        public async void MoveTestMethod()
+        public async Task MoveTestMethod()
         {
             Vector2 Dimensions = new(100, 100);
             Vector2 initialPosition = new(10.0f, 10.0f);

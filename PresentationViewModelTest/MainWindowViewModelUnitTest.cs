@@ -143,11 +143,11 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel.Test
             {
                 public ModelBall(double top, double left)
                 { }
-                public double Diameter => throw new NotImplementedException();
+                public double Diameter => 10;
 
-                public double Top => throw new NotImplementedException();
+                public double Top => 10;
 
-                public double Left => throw new NotImplementedException();
+                public double Left => 10;
 
                 public event PropertyChangedEventHandler? PropertyChanged;
             }
